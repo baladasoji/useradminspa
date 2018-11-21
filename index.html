@@ -1,0 +1,53 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Graph API demo</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron.css" rel="stylesheet">
+    <script type="text/javascript" src="graph.js"></script>
+  </head>
+
+  <body onload=callRest()>
+
+    <div class="jumbotron">
+      <div class="container">
+
+        <h1 class="display-3">My Groups</h1>
+        <p>Here are my groups</p>
+
+
+	<div> <input type="text" id="email"> </input> </div>
+	<div class="row">
+              <div class="col-xl-6">
+                <a href="#" class="btn btn-info" role="button" id="btnGetMyGroups" >Get My Groups </a>
+              </div>
+              <div class="col-xl-6">
+                <a href="#" class="btn btn-info" role="button" id="btnGetUserWithEmail" > Search User </a>
+              </div>
+	</div>
+	<div class="row">
+              <div class="col-xl-4" id="testgrp">
+              </div>
+              <div class="col-xl-4" id="stagegrp">
+              </div>
+              <div class="col-xl-4" id="prodgrp">
+              </div>
+	</div>
+
+	 <div id="ownedgroups">
+	 <div id="userresult">
+
+	 </div>
+    </div>
+
+  </body>
+</html>
