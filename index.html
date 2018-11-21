@@ -19,20 +19,28 @@
   <body onload=callRest()>
 
     <div class="jumbotron">
+
       <div class="container">
-
-        <h1 class="display-3">My Groups</h1>
-        <p>Here are my groups</p>
-
-
-	<div> <input type="text" id="email"> </input> </div>
+        <h2 class="display-4">Portal access management - Maersk users</h2>
+      </div>
+    </div>
+      <div class="container">
+	
+	<form>
 	<div class="row">
               <div class="col-xl-6">
-                <a href="#" class="btn btn-info" role="button" id="btnGetMyGroups" >Get My Groups </a>
+		<input type="text" id="email" class="form-control" placeholder="Email Address"> </input> 
               </div>
               <div class="col-xl-6">
                 <a href="#" class="btn btn-info" role="button" id="btnGetUserWithEmail" > Search User </a>
               </div>
+	</div>
+	</form>
+	<div class="row" id="userresult">
+		<div id="userdisplayname" class="col-xl-4 success"> </div>
+		<div id="useremail" class="col-xl-4 success"> </div>
+		<div id="userid" class="col-xl-4 success"> </div>
+		<div id="usergrp" class="col-xl-4 success"> </div>
 	</div>
 	<div class="row">
               <div class="col-xl-4" id="testgrp">
@@ -44,10 +52,8 @@
 	</div>
 
 	 <div id="ownedgroups">
-	 <div id="userresult">
+      </div>
 
-	 </div>
-    </div>
 
   </body>
 </html>
