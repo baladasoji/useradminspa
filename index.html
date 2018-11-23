@@ -1,59 +1,65 @@
-<html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
-
-    <title>Graph API demo</title>
-
+    <title>Obtain an ID token for CCP</title>
     <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="jumbotron.css" rel="stylesheet">
-    <script type="text/javascript" src="graph.js"></script>
-  </head>
 
-  <body onload=callRest()>
 
+
+<script language=javascript>
+
+function getURLParameter(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+}
+
+function startup(){
+
+    document.getElementById('settoken').addEventListener('click', storeToken);
+}
+
+
+function storeToken()
+{
+    id_token = document.getElementById("token").value ;
+    if (id_token == null || id_token.length == 0){ 
+        document.getElementById("message").innerHTML = "Error setting the token. Please provide a valid token ";
+    }
+    else{
+        document.getElementById("message").innerHTML = "Token set successfully <br><br> " +id_token;
+        sessionStorage.id_token = id_token;
+        setTimeout(function(){ 
+            window.location.href = "admin.html";
+        }, 3000);  
+    }
+}
+</script>
+
+</head>
+<body onload="startup()">
     <div class="jumbotron">
-
       <div class="container">
-        <h2 class="display-4">Portal access management - Maersk users</h2>
-      </div>
-    </div>
-      <div class="container">
-	
+        <h1 class="display-3">Portal User management - Graph API</h1>
+        <p>This application needs an access token for graph API.</p>
 	<form>
 	<div class="row">
               <div class="col-xl-6">
-		<input type="text" id="email" class="form-control" placeholder="Email Address"> </input> 
+		<input type="text" id="token" class="form-control" placeholder="Paste token here"> </input> 
               </div>
               <div class="col-xl-6">
-                <a href="#" class="btn btn-info" role="button" id="btnGetUserWithEmail" > Search User </a>
+                <a href="#" class="btn btn-info" role="button" id="settoken" > Search User </a>
               </div>
 	</div>
 	</form>
-	<div class="row" id="userresult">
-		<div id="userdisplayname" class="col-xl-4 success"> </div>
-		<div id="useremail" class="col-xl-4 success"> </div>
-		<div id="userid" class="col-xl-4 success"> </div>
-		<div id="usergrp" class="col-xl-4 success"> </div>
-	</div>
-	<div class="row">
-              <div class="col-xl-4" id="testgrp">
-              </div>
-              <div class="col-xl-4" id="stagegrp">
-              </div>
-              <div class="col-xl-4" id="prodgrp">
-              </div>
-	</div>
-
-	 <div id="ownedgroups">
+        <p id="message"> </p>
       </div>
+    </div>
+</body>
 
 
-  </body>
-</html>
+

@@ -1,0 +1,59 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Graph API demo</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron.css" rel="stylesheet">
+    <script type="text/javascript" src="graph.js"></script>
+  </head>
+
+  <body onload=callRest()>
+
+    <div class="jumbotron">
+
+      <div class="container">
+        <h2 class="display-4">Portal access management - Maersk users</h2>
+      </div>
+    </div>
+      <div class="container">
+	
+	<form>
+	<div class="row">
+              <div class="col-xl-6">
+		<input type="text" id="email" class="form-control" placeholder="Email Address"> </input> 
+              </div>
+              <div class="col-xl-6">
+                <a href="#" class="btn btn-info" role="button" id="btnGetUserWithEmail" > Search User </a>
+              </div>
+	</div>
+	</form>
+	<div class="row" id="userresult">
+		<div id="userdisplayname" class="col-xl-4 success"> </div>
+		<div id="useremail" class="col-xl-4 success"> </div>
+		<div id="userid" class="col-xl-4 success"> </div>
+		<div id="usergrp" class="col-xl-4 success"> </div>
+	</div>
+	<div class="row">
+              <div class="col-xl-4" id="testgrp">
+              </div>
+              <div class="col-xl-4" id="stagegrp">
+              </div>
+              <div class="col-xl-4" id="prodgrp">
+              </div>
+	</div>
+
+	 <div id="ownedgroups">
+      </div>
+
+
+  </body>
+</html>
