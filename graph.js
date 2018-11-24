@@ -80,8 +80,16 @@ function removeUserFromGroup ( groupid)
     apiXMLReq.onreadystatechange = function() {
         if (this.readyState == 4)
         {
-		alert('removed');
-	checkUserGroups();
+	    if (this.status == 204)
+	    {
+		showMsgNSecs('alert-info','Group removed from user', 3);
+		checkUserGroups();
+	    }
+	    if (this.status == 401)
+	    {
+		msg = JSON.parse(apiXMLReq.responseText).error.code ;
+		showMsgNSecs('alert-danger','You are unauthorized: '+msg, 3);
+	    }
 	}};
     apiXMLReq.open("DELETE", graph_url_groups + url , true );
     apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
@@ -98,11 +106,17 @@ function assignUserToGroup ( groupid)
 	userm = `{ "@odata.id": "https://graph.microsoft.com/v1.0/directoryObjects/${userid}" }` ;
     var apiXMLReq = new XMLHttpRequest();
     apiXMLReq.onreadystatechange = function() {
-        if (this.readyState == 4)
-        {
-		alert('added');
+	    if (this.status == 204)
+	    {
+		showMsgNSecs('alert-info','Group Added to user', 3);
 		checkUserGroups();
-	}};
+	    }
+	    if (this.status == 401)
+	    {
+		msg = JSON.parse(apiXMLReq.responseText).error.code ;
+		showMsgNSecs('alert-danger','You are unauthorized: '+msg, 3);
+	    }
+	};
     apiXMLReq.open("POST", graph_url_groups + url , true );
     apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
     apiXMLReq.setRequestHeader("Content-type","application/json");
@@ -140,11 +154,19 @@ function callUserApi(element, url, token)
     apiXMLReq.onreadystatechange = function() {
         if (this.readyState == 4)
         {
-	    user = JSON.parse(apiXMLReq.responseText).value[0];
+	    if (this.status == 200)
+	    {
+		user = JSON.parse(apiXMLReq.responseText).value[0];
 		document.getElementById('userdisplayname').innerText = user.displayName;
 		document.getElementById('useremail').innerText = user.mail;
 		document.getElementById('userid').innerText = user.id;
-	checkUserGroups();
+		checkUserGroups();
+	    }
+	    if (this.status == 401)
+	    {
+		msg = JSON.parse(apiXMLReq.responseText).error.code ;
+		showMsgNSecs('alert-danger','You are unauthorized: '+msg, 3);
+	    }
         }
       };
     apiXMLReq.open("GET", graph_url + url , true );
@@ -277,4 +299,16 @@ function callRest()
 	//callGraphApi('result','ownedObjects','');
 //	callGraphApi('result','ownedObjects?$select=id,displayName','');
 //	callGraphApi('result','users?$filter=startswith(mail,\'john.doe\')&$select=id,mail','');
+}
+
+
+function showMsgNSecs (alertclass, message, numsecs)
+{
+    document.getElementById('message').className = "alert "+alertclass;
+    document.getElementById('message').innerHTML = message;
+
+    setTimeout(function(){
+	document.getElementById('message').className = "alert alert-info ";
+	document.getElementById('message').innerHTML = 'Click on the Groups to Add or Remove them from user';
+    }, numsecs*1000);
 }
