@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t  dasoji/useradminspa .
+docker build -t  dasoji/mlinternalspa .

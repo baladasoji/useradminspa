@@ -1,7 +1,13 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-  padding-top: 50px;
-  padding-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+div.myjumbo {
+    background-color: #e9ecef;
+    margin-bottom: 2rem;
+    padding: 1rem 1rem;
+    border-radius: .5rem;
 }
 p.token
 {

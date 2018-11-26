@@ -13,6 +13,7 @@
 
     <!-- Custom styles for this template -->
     <link href="jumbotron.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="graph.js"></script>
   </head>
 
@@ -24,35 +25,47 @@
         <h2 class="display-4">Portal access management - Maersk users</h2>
       </div>
     </div>
-      <div class="container">
+      <div class="container myjumbo">
 	
-	<div id="message" class="alert alert-info"> </div>
+	<h2>
+	
 	<form>
 	<div class="row">
               <div class="col-xl-6">
 		<input type="text" id="email" class="form-control" placeholder="Email Address"> </input> 
               </div>
               <div class="col-xl-6">
-                <a href="#" class="btn btn-info" role="button" id="btnGetUserWithEmail" > Search User </a>
+                <a href="#" class="btn btn-info btn-block btn-lg" role="button" id="btnGetUserWithEmail" > Search User </a>
               </div>
 	</div>
 	</form>
-	<div class="row" id="userresult">
-		<div id="userdisplayname" class="col-xl-4 success"> </div>
-		<div id="useremail" class="col-xl-4 success"> </div>
-		<div id="userid" class="col-xl-4 success"> </div>
-		<div id="usergrp" class="col-xl-4 success"> </div>
+	<div class="border border-secondary rounded" id="userresult" style="display:none">
+		<p id="userdisplayname" class="bg-info h3 text-light" style="margin-bottom:0"> </p> 
+		<p id="useremail" class="bg-info h3 text-light " style="margin-bottom:0"> </p> 
 	</div>
-	<div class="row">
-              <div class="col-xl-4" id="testgrp">
+	</h2>
+      </div>
+      <div class="container myjumbo">
+	<h2>
+	<div id="message" class="alert alert-primary" style="visibility:hidden"> </div>
+	</h2>
+	<div class="row mt-4" id="allgroups" style="display:none margin-right:0px margin-right:0px">
+              <div class="col-md-5"  id="default">
+		<p class="bg-dark h1 row text-light"> Primary Roles </p>
+		<div class="row" id="packagegrp"></div>
+		<div class="row" id="inheritedgrp"></div>
               </div>
-              <div class="col-xl-4" id="stagegrp">
+              <div class="col-md-2"> </div>
+              <div class="col-md-5" id="additional">
+		<p class="bg-dark h1 row text-light"> Additional Roles </p>
+		<div class="row" id="additionalgrp"></div>
+              </div>
+        <!--      <div class="col-xl-4" id="stagegrp">
               </div>
               <div class="col-xl-4" id="prodgrp">
-              </div>
+              </div> -->
 	</div>
 
-	 <div id="ownedgroups">
       </div>
 
 

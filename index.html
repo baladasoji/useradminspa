@@ -6,9 +6,9 @@
     <title>Obtain an ID token for CCP</title>
     <!-- Bootstrap core CSS -->
     <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="jumbotron.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="jumbotron.css" rel="stylesheet">
 
 
 
@@ -26,13 +26,13 @@ function startup(){
 
 function storeToken()
 {
-    id_token = document.getElementById("token").value ;
-    if (id_token == null || id_token.length == 0){ 
+    access_token = document.getElementById("token").value ;
+    if (access_token == null || access_token.length == 0){ 
         document.getElementById("message").innerHTML = "Error setting the token. Please provide a valid token ";
     }
     else{
-        document.getElementById("message").innerHTML = "Token set successfully <br><br> " +id_token;
-        sessionStorage.id_token = id_token;
+        document.getElementById("message").innerHTML = "Token set successfully Redirecting to admin page .. <br><br> " +access_token;
+        sessionStorage.access_token = access_token;
         setTimeout(function(){ 
             window.location.href = "admin.html";
         }, 3000);  
@@ -44,7 +44,7 @@ function storeToken()
 <body onload="startup()">
     <div class="jumbotron">
       <div class="container">
-        <h1 class="display-3">Portal User management - Graph API</h1>
+        <h1 class="display-4">Portal User management - Graph API</h1>
         <p>This application needs an access token for graph API.</p>
 	<form>
 	<div class="row">
@@ -52,7 +52,7 @@ function storeToken()
 		<input type="text" id="token" class="form-control" placeholder="Paste token here"> </input> 
               </div>
               <div class="col-xl-6">
-                <a href="#" class="btn btn-info" role="button" id="settoken" > Search User </a>
+                <a href="#" class="btn btn-info" role="button" id="settoken" > Set Access Token </a>
               </div>
 	</div>
 	</form>
