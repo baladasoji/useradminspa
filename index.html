@@ -5,7 +5,7 @@
     <meta name="author" content="">
     <title>Obtain an ID token for CCP</title>
     <!-- Bootstrap core CSS -->
-    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="jumbotron.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
@@ -35,7 +35,7 @@ function storeToken()
         sessionStorage.access_token = access_token;
         setTimeout(function(){ 
             window.location.href = "admin.html";
-        }, 3000);  
+        }, 2000);  
     }
 }
 </script>
