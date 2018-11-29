@@ -7,13 +7,15 @@ var grp_memberships;
 var access_token='';
 var currentEnvGroups=[];
 var currentEnv='';
+var currentPkgGroup='';
 
 var res='';
 
 
 // Removes the curent active user from the group
-function removeUserFromGroup ( groupid)
+function removeUserFromGroup (userid, groupid)
 {
+    //console.log("userid is "+userid + "group id is "+groupid);
     var included=false;  
     included=getSubGroups(currentEnvGroups, currentEnv , "included").includes(groupid);
     var pkg = false;
@@ -27,16 +29,10 @@ function removeUserFromGroup ( groupid)
 	sgrp = getSubGroups(currentEnvGroups, currentEnv, "included") ;
 	for (grp in sgrp)
 	{
-	    removeUserFromGroup (sgrp[grp]);
+	    removeUserFromGroup (userid, sgrp[grp]);
 	}
     }
-    var included=false;  
-    if (getSubGroups(currentEnvGroups, currentEnv , "included").includes(groupid))
-    {
-	included = true;
-    }
-	userid = user.id;
-	url = `/${groupid}/members/${userid}/$ref`;
+    url = `/${groupid}/members/${userid}/$ref`;
     var apiXMLReq = new XMLHttpRequest();
     apiXMLReq.onreadystatechange = function() {
         if (this.readyState == 4)
@@ -48,7 +44,13 @@ function removeUserFromGroup ( groupid)
 		    showMsgNSecs('alert-info','Removing group from user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
 		    setTimeout(function() 
 		    { 
-			checkUserGroups();
+			curuserelement = document.getElementById(userid)
+			if (curuserelement.className != null)
+			{
+			    cn = curuserelement.className;
+			    curuserelement.className= cn.replace("btn-success","btn-secondary");
+			}
+			//checkUserGroups();
 		    }, timeout*1000);
 		}
 	    }
@@ -76,9 +78,9 @@ function handle401(responseJson)
 
 // Assigns the current active user to the group
 
-function assignUserToGroup ( groupid)
+function assignUserToGroup (userid, groupid)
 {
-
+    //console.log("userid is "+userid + "group id is "+groupid);
     var included=false;  
     included=getSubGroups(currentEnvGroups, currentEnv , "included").includes(groupid);
     var pkg = false;
@@ -93,12 +95,11 @@ function assignUserToGroup ( groupid)
 	sgrp = getSubGroups(currentEnvGroups, currentEnv, "included") ;
 	for (grp in sgrp)
 	{
-	    assignUserToGroup (sgrp[grp]);
+	    assignUserToGroup (userid, sgrp[grp]);
 	}
     }
 
 	url = `/${groupid}/members/$ref`;
-	userid = user.id;
 	userm = `{ "@odata.id": "https://graph.microsoft.com/v1.0/directoryObjects/${userid}" }` ;
     var apiXMLReq = new XMLHttpRequest();
     apiXMLReq.onreadystatechange = function() {
@@ -109,7 +110,13 @@ function assignUserToGroup ( groupid)
 		showMsgNSecs('alert-info','Adding group to user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
 		    setTimeout(function() 
 		    { 
-			checkUserGroups();
+			curuserelement = document.getElementById(userid)
+			if (curuserelement.className != null)
+			{
+			    cn = curuserelement.className;
+			    curuserelement.className= cn.replace("btn-secondary","btn-success");
+			}
+			//checkUserGroups();
 		    }, timeout*1000);
 		}
 	    }
@@ -159,12 +166,27 @@ function callUserApi(element, url, token)
 	    if (this.status == 200)
 	    {
 		user = JSON.parse(apiXMLReq.responseText).value[0];
-		document.getElementById('userdisplayname').innerText = user.displayName;
-		document.getElementById('useremail').innerText = user.mail;
-		document.getElementById('userresult').style = 'display:show';
-		//document.getElementById('userid').innerText = user.id;
-		document.getElementById('allgroups').style = 'display:show';
-		checkUserGroups();
+
+		var col = document.createElement("BUTTON");
+		col.className = "mt-1 btn user btn-block btn-secondary " ;
+		col.id = user.id ;
+		col.innerText = user.displayName ;
+		col.setAttribute("width","100%");
+		col.addEventListener('click', function() { 
+				    //console.log(this.id);
+				    if (this.className.includes("btn-secondary"))
+				    {
+					    assignUserToGroup ( this.id, currentPkgGroup);
+				    }
+				    else
+				    {
+					    removeUserFromGroup(this.id, currentPkgGroup);
+				    }
+		});
+
+		document.getElementById(element).appendChild(col);
+		checkUserInGroup(user.id, currentPkgGroup);
+
 	    }
 	    if (this.status == 401)
 	    {
@@ -180,6 +202,17 @@ function callUserApi(element, url, token)
 }
 
 
+function cleanUpElement(element)
+{
+    while (element.firstChild)
+    {
+	//console.log("removing "+element.firstChild); 
+	element.firstChild.remove();
+    }
+
+}
+
+/*
 function populateGroups (grparray)
 {
     var pkggrp = document.getElementById('packagegrp');
@@ -223,7 +256,7 @@ function populateGroups (grparray)
 		    //console.log(this.id);
 		    if (this.className.includes("btn-secondary"))
 		    {
-			    assignUserToGroup ( this.id);
+			    assignUserToGroup ( this.id );
 		    }
 		    else
 		    {
@@ -235,6 +268,8 @@ function populateGroups (grparray)
     }
 	
 }
+
+*/
 
 // This function resets the color of all the groups to unassigned color
 function resetColorOfGroups()
@@ -257,7 +292,7 @@ function getMyOwnedGroups()
 	callGraphApi('ownedgroups','me/ownedObjects?$select=id,displayName',access_token);
 }
 
-function getUserWithEmail()
+function getUsersWithEmail()
 {
 	if (currentEnv == null || currentEnv == "" || currentEnv == "NONE" )
 	{
@@ -265,15 +300,25 @@ function getUserWithEmail()
 	}
 	else
 	{
-	    mailaddress=document.getElementById('email').value;
-	    callUserApi('userresult',"users?$filter=startswith(mail,\'" + mailaddress+ "\')&$select=id,mail,displayName",access_token);
+	    cleanUpElement(document.getElementById('userresult'));
+	    allemailsstr=  document.getElementById('emails').value;
+	    emails = allemailsstr.split("\n");
+	    for (email in emails)
+	    {
+		curmail = emails[email];
+		if (curmail.trim() != "")
+		{
+		    //console.log(emails[email]);
+		    callUserApi('userresult',"users?$filter=startswith(mail,\'" + curmail+ "\')&$select=id,mail,displayName",access_token);
+		}
+	    }
 	}
 }
 
 function changeEnvironment()
 {
     currentEnv = this.value;
-    console.log("Current environment is "+currentEnv);
+    //console.log("Current environment is "+currentEnv);
     if (currentEnv === "NONE")
     {
 	return;
@@ -290,21 +335,17 @@ function changeEnvironment()
     { 
 	currentEnvGroups = PRODGroups;
     }
-    populateGroups( currentEnvGroups );
-    checkUserGroups();
+    currentPkgGroup = getSubGroups(currentEnvGroups, currentEnv , "package")[0];
+//    populateGroups( currentEnvGroups );
+//    checkUserGroups();
     
 }
 
 // This function obtains the list of groups a user is in and updates the color coding of the groups based on the user membership
-function checkUserGroups()
+function checkUserInGroup(userid, groupid)
 {
-	if (user != null)
-	{
 	    groupids = [];
-	    for (grp in currentEnvGroups)
-	    {
-		    groupids.push(new String(currentEnvGroups[grp].id));
-	    }
+	    groupids.push(new String(groupid));
 	    //console.log(groupids);
 	    pmsg = "{" + JSON.stringify("groupIds") + ":" + JSON.stringify(groupids) + "}";
 	    //console.log(pmsg);
@@ -313,15 +354,15 @@ function checkUserGroups()
 		if (this.readyState == 4)
 		{
 		    // Once you get response from the call then reset the color of groups
-		    resetColorOfGroups();
+		    //resetColorOfGroups();
 		    if (this.status == 200)
 		    {
 			usergrps = JSON.parse(apiXMLReq.responseText).value;
-		//	document.getElementById('usergrp').innerText = usergrps;
-			for (ugrp in usergrps)
+			if (usergrps.length > 0)
 			{
-				cn = document.getElementById(usergrps[ugrp]).className;
-				document.getElementById(usergrps[ugrp]).className=cn.replace("btn-secondary","btn-success");
+				curuser = document.getElementById(userid);
+				cn = curuser.className;
+				curuser.className=cn.replace("btn-secondary","btn-success");
 			}
 		    }
 		    else
@@ -331,19 +372,69 @@ function checkUserGroups()
 		    }
 		}
 	      };
-	    apiXMLReq.open("POST", graph_url_users + "/" + user.id + "/checkMemberGroups" , true );
+	    apiXMLReq.open("POST", graph_url_users + "/" + userid + "/checkMemberGroups" , true );
 	    apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
 	    apiXMLReq.setRequestHeader("Content-type","application/json");
 	    apiXMLReq.send(pmsg);
-	}
 
+}
+
+function preChecksForAll()
+{
+    //console.log("inside prechecksforall");
+	if (currentEnv == null || currentEnv == "" || currentEnv == "NONE" )
+	{
+	    showMsgNSecs ('alert-danger','Please choose environment first',3);
+	    return false;
+	}
+	else if (!document.getElementById('userresult').firstChild)
+	{
+	    
+	    showMsgNSecs ('alert-danger','Please search for users first',3);
+	    return false;
+	}
+	else
+	    return true;
+}
+
+function assignToAll()
+{
+    //console.log("inside assignt ot all");
+    if (preChecksForAll())
+    {
+	allusers = document.getElementById("userresult").childNodes;
+	for (u=0 ;u <allusers.length; u++)
+	{
+	    assignUserToGroup(allusers[u].id, currentPkgGroup);
+	}
+	
+    }
+}
+
+function removeFromAll()
+{
+    //console.log("inside remove from  all");
+    if (preChecksForAll())
+    {
+	var allusers = document.getElementsByClassName("user");
+	for (u=0 ;u <allusers.length; u++)
+	{
+	    removeUserFromGroup(allusers[u].id, currentPkgGroup);
+	}
+	
+    }
 }
 
 function callRest()
 {
 	//document.getElementById('btnGetMyGroups').addEventListener('click', getMyOwnedGroups);
 	access_token=sessionStorage.access_token;
-	document.getElementById('btnGetUserWithEmail').addEventListener('click', getUserWithEmail);
+	//alert("inside call rest");
+	cleanUpElement(document.getElementById('userresult'));
+	document.getElementById('btnGetUsersWithEmail').addEventListener('click', getUsersWithEmail);
+	document.getElementById('btnAssignToAllUsers').addEventListener('click', assignToAll);
+	document.getElementById('btnRemoveFromAllUsers').addEventListener('click', removeFromAll);
+	document.getElementById('btnGetUsersWithEmail').addEventListener('click', getUsersWithEmail);
 	document.getElementById('environmentChoice').addEventListener('click', changeEnvironment);
 
 	//callGraphApi('result','ownedObjects','');

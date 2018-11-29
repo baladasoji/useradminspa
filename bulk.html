@@ -6,7 +6,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
 
-    <title>Graph API demo</title>
+    <title>Bulk assignment </title>
 
     <!-- Bootstrap core CSS -->
 
@@ -16,7 +16,7 @@
     <!-- Custom styles for this template -->
     <link href="jumbotron.css" rel="stylesheet">
     <script type="text/javascript" src="common.js"></script>
-    <script type="text/javascript" src="graph.js"></script>
+    <script type="text/javascript" src="bulk.js"></script>
   </head>
 
   <body onload=callRest()>
@@ -24,10 +24,12 @@
     <div class="jumbotron">
 
       <div class="container">
-        <h2 class="display-4">Portal access management - Maersk users</h2>
+        <h2 class="display-4">Portal access management - Bulk assignment</h2>
       </div>
     </div>
-      <div class="container myjumbo">
+
+
+     <div class="container myjumbo">
 	
 	<h2>
 	
@@ -51,40 +53,31 @@
 	</div>
 	<div class="row">
               <div class="col-6">
-		<input type="text" id="email" class="form-control" placeholder="Email Address"> </input> 
+
+		    <div class="form-group">
+		      <label for="emails">Email Addresses:</label>
+		      <textarea class="form-control" rows="5" id="emails"></textarea>
+		    </div>
               </div>
               <div class="col-6">
-                <a href="#" class="btn btn-info btn-block" role="button" id="btnGetUserWithEmail" > Search User </a>
+                <a href="#" class="btn btn-info btn-block" role="button" id="btnGetUsersWithEmail" > Search Users </a>
               </div>
 	</div>
 	</form>
-	<div class="border border-secondary rounded" id="userresult" style="display:none">
-		<p id="userdisplayname" class="bg-info h3 text-light" style="margin-bottom:0"> </p> 
-		<p id="useremail" class="bg-info h3 text-light " style="margin-bottom:0"> </p> 
-	</div>
-	</h2>
-      </div>
-      <div class="container myjumbo">
-	<h2>
 	<div id="message" class="alert alert-primary" style="visibility:hidden"> </div>
-	</h2>
-	<div class="row mt-4" id="allgroups" style="display:none margin-right:0px margin-right:0px">
-              <div class="col-md-5"  id="default">
-		<p class="bg-dark h1 row text-light"> Primary Roles </p>
-		<div class="row" id="packagegrp"></div>
-		<div class="row" id="inheritedgrp"></div>
-              </div>
-              <div class="col-md-2"> </div>
-              <div class="col-md-5" id="additional">
-		<p class="bg-dark h1 row text-light"> Additional Roles </p>
-		<div class="row" id="additionalgrp"></div>
-              </div>
-        <!--      <div class="col-xl-4" id="stagegrp">
-              </div>
-              <div class="col-xl-4" id="prodgrp">
-              </div> -->
-	</div>
+	
 
+	<div class="row">
+              <div class="col-6">
+                <a href="#message" class="btn btn-success btn-block" role="button" id="btnAssignToAllUsers" > Assign to All </a>
+	      </div>
+              <div class="col-6">
+                <a href="#mesage" class="btn btn-danger btn-block" role="button" id="btnRemoveFromAllUsers" > Remove from All </a>
+	      </div>
+	</div>
+	<div class="border border-secondary mt-4 rounded" id="userresult">
+	</div>
+	</h2>
       </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
