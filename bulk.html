@@ -21,10 +21,18 @@
 
 <body onload=callRest()>
 
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link h3" href="index.html">Home</a>
+          <a class="nav-item nav-link h3" href="admin.html">Single User Administration</a>
+          <a class="nav-item nav-link h3 active" href="bulk.html">Bulk user Administration</a>
+        </div>
+    </nav>
   <div class="jumbotron">
 
     <div class="container">
-      <h2 class="display-4">Portal access management - Bulk assignment</h2>
+      <h2 class="display-4">Portal access - Bulk assignment</h2>
     </div>
   </div>
 
@@ -35,14 +43,9 @@
 
       <form>
         <div class="row mb-4">
-          <div class="col-6">
+          <div class="col-12">
             <p>
-              <label for="environmentChoice" class="display-5">Environment</label>
-            </p>
-          </div>
-          <div class="col-6">
-            <p>
-              <select id="environmentChoice" class="btn btn-block btn-info">
+              <select id="environmentChoice" class="btn btn-block btn-info btn-lg">
                 <option value="NONE">Please choose an environment.. </option>
                 <option value="CDT">CDT</option>
                 <option value="STAGE">Staging</option>
@@ -51,28 +54,29 @@
             </p>
           </div>
         </div>
-        <div class="row">
-          <div class="col-6">
-
+        <div class="row mb-2">
+          <div class="col-12">
             <div class="form-group">
-              <label for="emails">Email Addresses:</label>
-              <textarea class="form-control" rows="5" id="emails"></textarea>
+              <textarea class="form-control" rows="5" id="emails" placeholder="Paste email addresses here - One per line"></textarea>
             </div>
           </div>
-          <div class="col-6">
-            <a href="#" class="btn btn-info btn-block" role="button" id="btnGetUsersWithEmail" > Search Users </a>
+        </div>
+        <div class="row mb-2">
+          <div class="col-12">
+            <a href="#" class="btn btn-info btn-block btn-lg" role="button" id="btnGetUsersWithEmail" > Search Users </a>
           </div>
         </div>
+
       </form>
       <div id="message" class="alert alert-primary" style="visibility:hidden"> </div>
 
 
       <div class="row">
         <div class="col-6">
-          <a href="#message" class="btn btn-success btn-block" role="button" id="btnAssignToAllUsers" > Assign to All </a>
+          <a href="#message" class="btn btn-success btn-block btn-lg" role="button" id="btnAssignToAllUsers" > Assign to All </a>
         </div>
         <div class="col-6">
-          <a href="#mesage" class="btn btn-danger btn-block" role="button" id="btnRemoveFromAllUsers" > Remove from All </a>
+          <a href="#mesage" class="btn btn-danger btn-block btn-lg" role="button" id="btnRemoveFromAllUsers" > Remove from All </a>
         </div>
       </div>
       <div class="border border-secondary mt-4 rounded" id="userresult">
