@@ -189,7 +189,7 @@ function removeUserFromGroup ( groupid)
     cleanUpElement(pkggrp);
     cleanUpElement(inheritedgrp);
     cleanUpElement(additionalgrp);
-    for (item in grparray)
+    for (var item = 0; item < grparray.length; item++)
     {
       var col = document.createElement("BUTTON");
       col.className = "mt-1 btn group btn-block btn-secondary " + grparray[item].displayclass ;
@@ -352,11 +352,7 @@ function removeUserFromGroup ( groupid)
   {
     if (user != null)
     {
-      groupids = [];
-      for (grp in currentEnvGroups)
-      {
-        groupids.push(new String(currentEnvGroups[grp].id));
-      }
+      groupids = curenvids=currentEnvGroups.map(i => i.id);
       //console.log(groupids);
       pmsg = "{" + JSON.stringify("groupIds") + ":" + JSON.stringify(groupids) + "}";
       //console.log(pmsg);
@@ -370,7 +366,7 @@ function removeUserFromGroup ( groupid)
           {
             usergrps = JSON.parse(apiXMLReq.responseText).value;
             //	document.getElementById('usergrp').innerText = usergrps;
-            for (ugrp in usergrps)
+            for (ugrp=0; ugrp<usergrps.length; ugrp++)
             {
               cn = document.getElementById(usergrps[ugrp]).className;
               document.getElementById(usergrps[ugrp]).className=cn.replace("btn-secondary","btn-success");
