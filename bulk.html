@@ -1,87 +1,87 @@
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../../../../favicon.ico">
 
-    <title>Bulk assignment </title>
+  <title>Bulk assignment </title>
 
-    <!-- Bootstrap core CSS -->
+  <!-- Bootstrap core CSS -->
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- Custom styles for this template -->
-    <link href="jumbotron.css" rel="stylesheet">
-    <script type="text/javascript" src="common.js"></script>
-    <script type="text/javascript" src="bulk.js"></script>
-  </head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Custom styles for this template -->
+  <link href="jumbotron.css" rel="stylesheet">
+  <script type="text/javascript" src="common.js"></script>
+  <script type="text/javascript" src="bulk.js"></script>
+</head>
 
-  <body onload=callRest()>
+<body onload=callRest()>
 
-    <div class="jumbotron">
+  <div class="jumbotron">
 
-      <div class="container">
-        <h2 class="display-4">Portal access management - Bulk assignment</h2>
-      </div>
+    <div class="container">
+      <h2 class="display-4">Portal access management - Bulk assignment</h2>
     </div>
+  </div>
 
 
-     <div class="container myjumbo">
-	
-	<h2>
-	
-	<form>
-	<div class="row mb-4">
-	    <div class="col-6">
-		<p>
-		  <label for="environmentChoice" class="display-5">Environment</label>
-		</p>
-	    </div>
-	    <div class="col-6">
-		<p>
-		  <select id="environmentChoice" class="btn btn-block btn-info">
-		    <option value="NONE">Please choose an environment.. </option>
-		    <option value="CDT">CDT</option>
-		    <option value="STAGE">Staging</option>
-		    <option value="PRODUCTION">Production</option>
-		  </select>
-		</p>
-	    </div>
-	</div>
-	<div class="row">
-              <div class="col-6">
+  <div class="container myjumbo">
 
-		    <div class="form-group">
-		      <label for="emails">Email Addresses:</label>
-		      <textarea class="form-control" rows="5" id="emails"></textarea>
-		    </div>
-              </div>
-              <div class="col-6">
-                <a href="#" class="btn btn-info btn-block" role="button" id="btnGetUsersWithEmail" > Search Users </a>
-              </div>
-	</div>
-	</form>
-	<div id="message" class="alert alert-primary" style="visibility:hidden"> </div>
-	
+    <h2>
 
-	<div class="row">
-              <div class="col-6">
-                <a href="#message" class="btn btn-success btn-block" role="button" id="btnAssignToAllUsers" > Assign to All </a>
-	      </div>
-              <div class="col-6">
-                <a href="#mesage" class="btn btn-danger btn-block" role="button" id="btnRemoveFromAllUsers" > Remove from All </a>
-	      </div>
-	</div>
-	<div class="border border-secondary mt-4 rounded" id="userresult">
-	</div>
-	</h2>
+      <form>
+        <div class="row mb-4">
+          <div class="col-6">
+            <p>
+              <label for="environmentChoice" class="display-5">Environment</label>
+            </p>
+          </div>
+          <div class="col-6">
+            <p>
+              <select id="environmentChoice" class="btn btn-block btn-info">
+                <option value="NONE">Please choose an environment.. </option>
+                <option value="CDT">CDT</option>
+                <option value="STAGE">Staging</option>
+                <option value="PRODUCTION">Production</option>
+              </select>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+
+            <div class="form-group">
+              <label for="emails">Email Addresses:</label>
+              <textarea class="form-control" rows="5" id="emails"></textarea>
+            </div>
+          </div>
+          <div class="col-6">
+            <a href="#" class="btn btn-info btn-block" role="button" id="btnGetUsersWithEmail" > Search Users </a>
+          </div>
+        </div>
+      </form>
+      <div id="message" class="alert alert-primary" style="visibility:hidden"> </div>
+
+
+      <div class="row">
+        <div class="col-6">
+          <a href="#message" class="btn btn-success btn-block" role="button" id="btnAssignToAllUsers" > Assign to All </a>
+        </div>
+        <div class="col-6">
+          <a href="#mesage" class="btn btn-danger btn-block" role="button" id="btnRemoveFromAllUsers" > Remove from All </a>
+        </div>
       </div>
+      <div class="border border-secondary mt-4 rounded" id="userresult">
+      </div>
+    </h2>
+  </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-  </body>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
 </html>

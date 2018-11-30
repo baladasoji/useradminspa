@@ -1,65 +1,62 @@
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Obtain an ID token for CCP</title>
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link href="jumbotron.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Access token for user administration</title>
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link href="jumbotron.css" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
+  <!-- Custom styles for this template -->
 
 
 
-<script language=javascript>
+  <script language=javascript>
 
-function getURLParameter(name) {
-  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [null, ''])[1].replace(/\+/g, '%20')) || null;
-}
+  function getURLParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+  }
 
-function startup(){
+  function startup(){
 
     document.getElementById('settoken').addEventListener('click', storeToken);
-}
+  }
 
 
-function storeToken()
-{
+  function storeToken()
+  {
     access_token = document.getElementById("token").value ;
-    if (access_token == null || access_token.length == 0){ 
-        document.getElementById("message").innerHTML = "Error setting the token. Please provide a valid token ";
+    if (access_token == null || access_token.length == 0){
+      document.getElementById("message").innerHTML = "Error setting the token. Please provide a valid token ";
     }
     else{
-        document.getElementById("message").innerHTML = "Token set successfully Redirecting to admin page .. <br><br> " +access_token;
-        sessionStorage.access_token = access_token;
-        setTimeout(function(){ 
-            window.location.href = "admin.html";
-        }, 2000);  
+      document.getElementById("message").innerHTML = "Token set successfully Redirecting to admin page .. <br><br> " +access_token;
+      sessionStorage.access_token = access_token;
+      setTimeout(function(){
+        window.location.href = "admin.html";
+      }, 2000);
     }
-}
+  }
 </script>
 
 </head>
 <body onload="startup()">
-    <div class="jumbotron">
-      <div class="container">
-        <h1 class="display-4">Portal User management - Graph API</h1>
-        <p>This application needs an access token for graph API.</p>
-	<form>
-	<div class="row">
-              <div class="col-xl-6">
-		<input type="text" id="token" class="form-control" placeholder="Paste token here"> </input> 
-              </div>
-              <div class="col-xl-6">
-                <a href="#" class="btn btn-info" role="button" id="settoken" > Set Access Token </a>
-              </div>
-	</div>
-	</form>
-        <p id="message"> </p>
-      </div>
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-4">Portal User management - Graph API</h1>
+      <p>This application needs an access token for graph API.</p>
+      <form>
+        <div class="row">
+          <div class="col-xl-6">
+            <input type="text" id="token" class="form-control" placeholder="Paste token here"> </input>
+          </div>
+          <div class="col-xl-6">
+            <a href="#" class="btn btn-info" role="button" id="settoken" > Set Access Token </a>
+          </div>
+        </div>
+      </form>
+      <p id="message"> </p>
     </div>
+  </div>
 </body>
-
-
-
