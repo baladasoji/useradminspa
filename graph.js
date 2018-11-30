@@ -340,7 +340,7 @@ function removeUserFromGroup ( groupid)
     notownedgroupnames = currentEnvGroups.filter(n => notownedgroups.includes(n.id)).map(i => i.Name);
     if (notownedgroupnames.length > 0)
     {
-      msg = "You are not an owner of the following groups. Please correct first " + notownedgroupnames;
+      msg = "You are not an owner of the following groups in Azure AD. Please correct this first " + notownedgroupnames;
       showMsgNSecs ('alert-danger', msg, 10);
       return false;
     }
@@ -397,6 +397,7 @@ function removeUserFromGroup ( groupid)
     access_token=sessionStorage.access_token;
     document.getElementById('btnGetUserWithEmail').addEventListener('click', getUserWithEmail);
     document.getElementById('environmentChoice').addEventListener('click', changeEnvironment);
+    // Get users owned groups from AD first we use this in comparision later
     getMyOwnedGroups();
 
     //callGraphApi('result','ownedObjects','');
