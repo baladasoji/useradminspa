@@ -1,0 +1,14 @@
+version: 2
+jobs:
+ build:
+   machine: true
+   steps:
+     - checkout
+     # with credentials stored in the UI
+     - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+
+     # build the application image
+     - run: docker build -t dasoji/useradminspa:$CIRCLE_BRANCH .
+
+     # deploy the image
+     - run: docker push dasoji/useradminspa:$CIRCLE_BRANCH

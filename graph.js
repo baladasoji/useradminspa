@@ -74,7 +74,7 @@ function removeUserFromGroup ( groupid)
     showMsgNSecs('alert-danger',msg, 10);
   }
 
-  
+
   // Assigns the current active user to the group
 
   function assignUserToGroup ( groupid)
@@ -255,7 +255,34 @@ function removeUserFromGroup ( groupid)
 
   function getMyOwnedGroups()
   {
-    callGraphApi('ownedgroups','me/ownedObjects?$select=id,displayName',access_token);
+    url='me/ownedObjects?$select=id,displayName';
+    var apiXMLReq = new XMLHttpRequest();
+    apiXMLReq.onreadystatechange = function() {
+      if (this.readyState == 4)
+      {
+        if (this.status == 200)
+        {
+
+          res = JSON.parse(apiXMLReq.responseText).value;
+          for (var item in res)
+          {
+            ownedgroups.push(res[item].id);
+
+          }
+//          console.log(ownedgroups);
+
+        }
+        else if (this.status == 401)
+        {
+          responseJson = JSON.parse(apiXMLReq.responseText);
+          handle401(responseJson)
+        }
+
+      }
+    };
+    apiXMLReq.open("GET", graph_url + url , true );
+    apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
+    apiXMLReq.send(null);
   }
 
   function getUserWithEmail()
@@ -291,9 +318,33 @@ function removeUserFromGroup ( groupid)
     {
       currentEnvGroups = PRODGroups;
     }
-    populateGroups( currentEnvGroups );
-    checkUserGroups();
+    if (checkIfOwner())
+    {
+      populateGroups( currentEnvGroups );
+      checkUserGroups();
+    }
 
+  }
+
+// This function checks if the logged in user is an owner of all the current environment Groups
+  function checkIfOwner()
+  {
+    //console.log(ownedgroups);
+    //console.log(currentEnvGroups);
+    //envgrpid = currentEnvGroups.map(grp, grp => id);
+    Array.prototype.diff = function(a) {
+      return this.filter(function(i) {return a.indexOf(i) < 0;});
+    };
+    curenvids=currentEnvGroups.map(i => i.id);
+    notownedgroups = curenvids.diff(ownedgroups);
+    notownedgroupnames = currentEnvGroups.filter(n => notownedgroups.includes(n.id)).map(i => i.Name);
+    if (notownedgroupnames.length > 0)
+    {
+      msg = "You are not an owner of the following groups. Please correct first " + notownedgroupnames;
+      showMsgNSecs ('alert-danger', msg, 10);
+      return false;
+    }
+    return true;
   }
 
   // This function obtains the list of groups a user is in and updates the color coding of the groups based on the user membership
@@ -346,6 +397,7 @@ function removeUserFromGroup ( groupid)
     access_token=sessionStorage.access_token;
     document.getElementById('btnGetUserWithEmail').addEventListener('click', getUserWithEmail);
     document.getElementById('environmentChoice').addEventListener('click', changeEnvironment);
+    getMyOwnedGroups();
 
     //callGraphApi('result','ownedObjects','');
     //	callGraphApi('result','ownedObjects?$select=id,displayName','');
