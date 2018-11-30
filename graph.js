@@ -7,6 +7,7 @@ var grp_memberships;
 var access_token='';
 var currentEnvGroups=[];
 var currentEnv='';
+var ownedgroups=[];
 
 var res='';
 
@@ -14,72 +15,72 @@ var res='';
 // Removes the curent active user from the group
 function removeUserFromGroup ( groupid)
 {
-    var included=false;  
-    included=getSubGroups(currentEnvGroups, currentEnv , "included").includes(groupid);
-    var pkg = false;
-    pkg=getSubGroups(currentEnvGroups, currentEnv , "package").includes(groupid);
-    var additional = false;
-    additional=getSubGroups(currentEnvGroups, currentEnv , "additional").includes(groupid);
-    var timeout = pkg ? 5 : 1;
-    if (pkg)
+  var included=false;
+  included=getSubGroups(currentEnvGroups, currentEnv , "included").includes(groupid);
+  var pkg = false;
+  pkg=getSubGroups(currentEnvGroups, currentEnv , "package").includes(groupid);
+  var additional = false;
+  additional=getSubGroups(currentEnvGroups, currentEnv , "additional").includes(groupid);
+  var timeout = pkg ? 5 : 1;
+  if (pkg)
+  {
+    //alert ('got a package group');
+    sgrp = getSubGroups(currentEnvGroups, currentEnv, "included") ;
+    for (grp in sgrp)
     {
-	//alert ('got a package group');
-	sgrp = getSubGroups(currentEnvGroups, currentEnv, "included") ;
-	for (grp in sgrp)
-	{
-	    removeUserFromGroup (sgrp[grp]);
-	}
+      removeUserFromGroup (sgrp[grp]);
     }
-    var included=false;  
-    if (getSubGroups(currentEnvGroups, currentEnv , "included").includes(groupid))
+  }
+  var included=false;
+  if (getSubGroups(currentEnvGroups, currentEnv , "included").includes(groupid))
+  {
+    included = true;
+  }
+  userid = user.id;
+  url = `/${groupid}/members/${userid}/$ref`;
+  var apiXMLReq = new XMLHttpRequest();
+  apiXMLReq.onreadystatechange = function() {
+    if (this.readyState == 4)
     {
-	included = true;
-    }
-	userid = user.id;
-	url = `/${groupid}/members/${userid}/$ref`;
-    var apiXMLReq = new XMLHttpRequest();
-    apiXMLReq.onreadystatechange = function() {
-        if (this.readyState == 4)
+      if (this.status == 204)
+      {
+        if (!included)
         {
-	    if (this.status == 204)
-	    {
-		if (!included)
-		{
-		    showMsgNSecs('alert-info','Removing group from user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
-		    setTimeout(function() 
-		    { 
-			checkUserGroups();
-		    }, timeout*1000);
-		}
-	    }
-	    if (this.status == 401)
-	    {
-		responseJson = JSON.parse(apiXMLReq.responseText);
-		handle401(responseJson)
-	    }
-	}};
+          showMsgNSecs('alert-info','Removing group from user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
+          setTimeout(function()
+          {
+            checkUserGroups();
+          }, timeout*1000);
+        }
+      }
+      if (this.status == 401)
+      {
+        responseJson = JSON.parse(apiXMLReq.responseText);
+        handle401(responseJson)
+      }
+    }};
     apiXMLReq.open("DELETE", graph_url_groups + url , true );
     apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
     apiXMLReq.setRequestHeader("Content-type","application/json");
     apiXMLReq.send(null);
-}
+  }
 
 
-function handle401(responseJson)
-{
+  function handle401(responseJson)
+  {
     msg = responseJson.error.code ;
     msg = msg+ " - " + responseJson.error.message ;
     msg = msg+ " <BR> Click <a href='index.html'> here </a> to Login" ;
     showMsgNSecs('alert-danger',msg, 10);
-}
+  }
 
+  
+  // Assigns the current active user to the group
 
-// Assigns the current active user to the group
+  function assignUserToGroup ( groupid)
+  {
 
-function assignUserToGroup ( groupid)
-{
-
-    var included=false;  
+    var included=false;
     included=getSubGroups(currentEnvGroups, currentEnv , "included").includes(groupid);
     var pkg = false;
     pkg=getSubGroups(currentEnvGroups, currentEnv , "package").includes(groupid);
@@ -89,99 +90,99 @@ function assignUserToGroup ( groupid)
     // Treat package groups differently
     if (pkg)
     {
-//	alert ('got a package group');
-	sgrp = getSubGroups(currentEnvGroups, currentEnv, "included") ;
-	for (grp in sgrp)
-	{
-	    assignUserToGroup (sgrp[grp]);
-	}
+      //	alert ('got a package group');
+      sgrp = getSubGroups(currentEnvGroups, currentEnv, "included") ;
+      for (grp in sgrp)
+      {
+        assignUserToGroup (sgrp[grp]);
+      }
     }
 
-	url = `/${groupid}/members/$ref`;
-	userid = user.id;
-	userm = `{ "@odata.id": "https://graph.microsoft.com/v1.0/directoryObjects/${userid}" }` ;
+    url = `/${groupid}/members/$ref`;
+    userid = user.id;
+    userm = `{ "@odata.id": "https://graph.microsoft.com/v1.0/directoryObjects/${userid}" }` ;
     var apiXMLReq = new XMLHttpRequest();
     apiXMLReq.onreadystatechange = function() {
-	    if (this.status == 204)
-	    {
-		if (!included)
-		{
-		showMsgNSecs('alert-info','Adding group to user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
-		    setTimeout(function() 
-		    { 
-			checkUserGroups();
-		    }, timeout*1000);
-		}
-	    }
-	    if (this.status == 401)
-	    {
-		responseJson = JSON.parse(apiXMLReq.responseText);
-		handle401(responseJson)
-	    }
-	};
+      if (this.status == 204)
+      {
+        if (!included)
+        {
+          showMsgNSecs('alert-info','Adding group to user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
+          setTimeout(function()
+          {
+            checkUserGroups();
+          }, timeout*1000);
+        }
+      }
+      if (this.status == 401)
+      {
+        responseJson = JSON.parse(apiXMLReq.responseText);
+        handle401(responseJson)
+      }
+    };
     apiXMLReq.open("POST", graph_url_groups + url , true );
     apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
     apiXMLReq.setRequestHeader("Content-type","application/json");
     apiXMLReq.send(userm);
-}
+  }
 
-function callGraphApi(element, url, token)
-{
+  function callGraphApi(element, url, token)
+  {
     var apiXMLReq = new XMLHttpRequest();
     apiXMLReq.onreadystatechange = function() {
-        if (this.readyState == 4)
+      if (this.readyState == 4)
+      {
+        ht='<table>';
+        res = JSON.parse(apiXMLReq.responseText).value;
+        for (var item in res)
         {
-		ht='<table>';
-	    res = JSON.parse(apiXMLReq.responseText).value;
-	    for (var item in res)
-		{
-			//console.log(res[item]);
-			ht = ht + '<tr><td>' + res[item].displayName + '</td><td>'+ res[item].mail + '</td><td>'+ res[item].id + '</td></tr>' ;
-
-		}
-		ht=ht+ '</table>';
-            document.getElementById(element).innerHTML = ht;
+          //console.log(res[item]);
+          ht = ht + '<tr><td>' + res[item].displayName + '</td><td>'+ res[item].mail + '</td><td>'+ res[item].id + '</td></tr>' ;
 
         }
-      };
+        ht=ht+ '</table>';
+        document.getElementById(element).innerHTML = ht;
+
+      }
+    };
     apiXMLReq.open("GET", graph_url + url , true );
     apiXMLReq.setRequestHeader("Authorization","Bearer "+token);
     apiXMLReq.send(null);
 
-}
+  }
 
-function callUserApi(element, url, token)
-{
+  function callUserApi(element, url, token)
+  {
     var apiXMLReq = new XMLHttpRequest();
     apiXMLReq.onreadystatechange = function() {
-        if (this.readyState == 4)
+      if (this.readyState == 4)
+      {
+        if (this.status == 200)
         {
-	    if (this.status == 200)
-	    {
-		user = JSON.parse(apiXMLReq.responseText).value[0];
-		document.getElementById('userdisplayname').innerText = user.displayName;
-		document.getElementById('useremail').innerText = user.mail;
-		document.getElementById('userresult').style = 'display:show';
-		//document.getElementById('userid').innerText = user.id;
-		document.getElementById('allgroups').style = 'display:show';
-		checkUserGroups();
-	    }
-	    if (this.status == 401)
-	    {
-		responseJson = JSON.parse(apiXMLReq.responseText);
-		handle401(responseJson)
-	    }
+          user = JSON.parse(apiXMLReq.responseText).value[0];
+          document.getElementById('userdisplayname').innerText = user.displayName;
+          document.getElementById('useremail').innerText = user.mail;
+          document.getElementById('userresult').style = 'display:show';
+          //document.getElementById('userid').innerText = user.id;
+          document.getElementById('allgroups').style = 'display:show';
+          checkUserGroups();
         }
-      };
+        if (this.status == 401)
+        {
+          responseJson = JSON.parse(apiXMLReq.responseText);
+          handle401(responseJson)
+        }
+      }
+    };
     apiXMLReq.open("GET", graph_url + url , true );
     apiXMLReq.setRequestHeader("Authorization","Bearer "+token);
     apiXMLReq.send(null);
 
-}
+  }
 
 
-function populateGroups (grparray)
-{
+  function populateGroups (grparray)
+  {
     var pkggrp = document.getElementById('packagegrp');
     var inheritedgrp = document.getElementById('inheritedgrp');
     var additionalgrp = document.getElementById('additionalgrp');
@@ -190,177 +191,177 @@ function populateGroups (grparray)
     cleanUpElement(additionalgrp);
     for (item in grparray)
     {
-	var col = document.createElement("BUTTON");
-	col.className = "mt-1 btn group btn-block btn-secondary " + grparray[item].displayclass ;
-	col.id = grparray[item].id ;
-	col.innerText = grparray[item].Name.substr(13) ;
-	col.setAttribute("width","100%");
-	var type = grparray[item].type;
-	col.setAttribute("type",type);
-	if ( type === "package")
-	{
-	    col.addEventListener('click', function() { 
-		    //console.log(this.id);
-		    if (this.className.includes("btn-secondary"))
-		    {
-			    assignUserToGroup ( this.id);
-		    }
-		    else
-		    {
-			    removeUserFromGroup(this.id);
-		    }
-	    });
-	    packagegrp.appendChild(col);
-	    
-	}
-	else if ( type === "included")
-	{
-	    inheritedgrp.appendChild(col);
-	}
-	else if ( type === "additional")
-	{
-	    col.addEventListener('click', function() { 
-		    //console.log(this.id);
-		    if (this.className.includes("btn-secondary"))
-		    {
-			    assignUserToGroup ( this.id);
-		    }
-		    else
-		    {
-			    removeUserFromGroup( this.id);
-		    }
-	    });
-	    additionalgrp.appendChild(col);
-	}
+      var col = document.createElement("BUTTON");
+      col.className = "mt-1 btn group btn-block btn-secondary " + grparray[item].displayclass ;
+      col.id = grparray[item].id ;
+      col.innerText = grparray[item].Name.substr(13) ;
+      col.setAttribute("width","100%");
+      var type = grparray[item].type;
+      col.setAttribute("type",type);
+      if ( type === "package")
+      {
+        col.addEventListener('click', function() {
+          //console.log(this.id);
+          if (this.className.includes("btn-secondary"))
+          {
+            assignUserToGroup ( this.id);
+          }
+          else
+          {
+            removeUserFromGroup(this.id);
+          }
+        });
+        packagegrp.appendChild(col);
+
+      }
+      else if ( type === "included")
+      {
+        inheritedgrp.appendChild(col);
+      }
+      else if ( type === "additional")
+      {
+        col.addEventListener('click', function() {
+          //console.log(this.id);
+          if (this.className.includes("btn-secondary"))
+          {
+            assignUserToGroup ( this.id);
+          }
+          else
+          {
+            removeUserFromGroup( this.id);
+          }
+        });
+        additionalgrp.appendChild(col);
+      }
     }
-	
-}
 
-// This function resets the color of all the groups to unassigned color
-function resetColorOfGroups()
-{
-	var grptds= document.getElementsByClassName("group");
-	for (t in grptds)
-	{
-		if (grptds[t].className != null)
-		{
-		    cn = grptds[t].className;
-		    grptds[t].className= cn.replace("btn-success","btn-secondary");
-		}
-	}
-}
+  }
+
+  // This function resets the color of all the groups to unassigned color
+  function resetColorOfGroups()
+  {
+    var grptds= document.getElementsByClassName("group");
+    for (t in grptds)
+    {
+      if (grptds[t].className != null)
+      {
+        cn = grptds[t].className;
+        grptds[t].className= cn.replace("btn-success","btn-secondary");
+      }
+    }
+  }
 
 
 
-function getMyOwnedGroups()
-{
-	callGraphApi('ownedgroups','me/ownedObjects?$select=id,displayName',access_token);
-}
+  function getMyOwnedGroups()
+  {
+    callGraphApi('ownedgroups','me/ownedObjects?$select=id,displayName',access_token);
+  }
 
-function getUserWithEmail()
-{
-	if (currentEnv == null || currentEnv == "" || currentEnv == "NONE" )
-	{
-	    showMsgNSecs ('alert-danger','Please choose environment first',3);
-	}
-	else
-	{
-	    mailaddress=document.getElementById('email').value;
-	    callUserApi('userresult',"users?$filter=startswith(mail,\'" + mailaddress+ "\')&$select=id,mail,displayName",access_token);
-	}
-}
+  function getUserWithEmail()
+  {
+    if (currentEnv == null || currentEnv == "" || currentEnv == "NONE" )
+    {
+      showMsgNSecs ('alert-danger','Please choose environment first',3);
+    }
+    else
+    {
+      mailaddress=document.getElementById('email').value;
+      callUserApi('userresult',"users?$filter=startswith(mail,\'" + mailaddress+ "\')&$select=id,mail,displayName",access_token);
+    }
+  }
 
-function changeEnvironment()
-{
+  function changeEnvironment()
+  {
     currentEnv = this.value;
     console.log("Current environment is "+currentEnv);
     if (currentEnv === "NONE")
     {
-	return;
+      return;
     }
     else if (currentEnv === "CDT")
     {
-	currentEnvGroups = CDTGroups;
+      currentEnvGroups = CDTGroups;
     }
     else if (currentEnv === "STAGE")
     {
-	currentEnvGroups = STAGEGroups;
+      currentEnvGroups = STAGEGroups;
     }
     else if (currentEnv == "PRODUCTION")
-    { 
-	currentEnvGroups = PRODGroups;
+    {
+      currentEnvGroups = PRODGroups;
     }
     populateGroups( currentEnvGroups );
     checkUserGroups();
-    
-}
 
-// This function obtains the list of groups a user is in and updates the color coding of the groups based on the user membership
-function checkUserGroups()
-{
-	if (user != null)
-	{
-	    groupids = [];
-	    for (grp in currentEnvGroups)
-	    {
-		    groupids.push(new String(currentEnvGroups[grp].id));
-	    }
-	    //console.log(groupids);
-	    pmsg = "{" + JSON.stringify("groupIds") + ":" + JSON.stringify(groupids) + "}";
-	    //console.log(pmsg);
-	    var apiXMLReq = new XMLHttpRequest();
-	    apiXMLReq.onreadystatechange = function() {
-		if (this.readyState == 4)
-		{
-		    // Once you get response from the call then reset the color of groups
-		    resetColorOfGroups();
-		    if (this.status == 200)
-		    {
-			usergrps = JSON.parse(apiXMLReq.responseText).value;
-		//	document.getElementById('usergrp').innerText = usergrps;
-			for (ugrp in usergrps)
-			{
-				cn = document.getElementById(usergrps[ugrp]).className;
-				document.getElementById(usergrps[ugrp]).className=cn.replace("btn-secondary","btn-success");
-			}
-		    }
-		    else
-		    {
-			responseJson = JSON.parse(apiXMLReq.responseText);
-			handle401(responseJson)
-		    }
-		}
-	      };
-	    apiXMLReq.open("POST", graph_url_users + "/" + user.id + "/checkMemberGroups" , true );
-	    apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
-	    apiXMLReq.setRequestHeader("Content-type","application/json");
-	    apiXMLReq.send(pmsg);
-	}
+  }
 
-}
+  // This function obtains the list of groups a user is in and updates the color coding of the groups based on the user membership
+  function checkUserGroups()
+  {
+    if (user != null)
+    {
+      groupids = [];
+      for (grp in currentEnvGroups)
+      {
+        groupids.push(new String(currentEnvGroups[grp].id));
+      }
+      //console.log(groupids);
+      pmsg = "{" + JSON.stringify("groupIds") + ":" + JSON.stringify(groupids) + "}";
+      //console.log(pmsg);
+      var apiXMLReq = new XMLHttpRequest();
+      apiXMLReq.onreadystatechange = function() {
+        if (this.readyState == 4)
+        {
+          // Once you get response from the call then reset the color of groups
+          resetColorOfGroups();
+          if (this.status == 200)
+          {
+            usergrps = JSON.parse(apiXMLReq.responseText).value;
+            //	document.getElementById('usergrp').innerText = usergrps;
+            for (ugrp in usergrps)
+            {
+              cn = document.getElementById(usergrps[ugrp]).className;
+              document.getElementById(usergrps[ugrp]).className=cn.replace("btn-secondary","btn-success");
+            }
+          }
+          else
+          {
+            responseJson = JSON.parse(apiXMLReq.responseText);
+            handle401(responseJson)
+          }
+        }
+      };
+      apiXMLReq.open("POST", graph_url_users + "/" + user.id + "/checkMemberGroups" , true );
+      apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
+      apiXMLReq.setRequestHeader("Content-type","application/json");
+      apiXMLReq.send(pmsg);
+    }
 
-function callRest()
-{
-	//document.getElementById('btnGetMyGroups').addEventListener('click', getMyOwnedGroups);
-	access_token=sessionStorage.access_token;
-	document.getElementById('btnGetUserWithEmail').addEventListener('click', getUserWithEmail);
-	document.getElementById('environmentChoice').addEventListener('click', changeEnvironment);
+  }
 
-	//callGraphApi('result','ownedObjects','');
-//	callGraphApi('result','ownedObjects?$select=id,displayName','');
-//	callGraphApi('result','users?$filter=startswith(mail,\'john.doe\')&$select=id,mail','');
-}
+  function callRest()
+  {
+    //document.getElementById('btnGetMyGroups').addEventListener('click', getMyOwnedGroups);
+    access_token=sessionStorage.access_token;
+    document.getElementById('btnGetUserWithEmail').addEventListener('click', getUserWithEmail);
+    document.getElementById('environmentChoice').addEventListener('click', changeEnvironment);
 
-// Utility function to display a message for some number of seconds
-function showMsgNSecs (alertclass, message, numsecs)
-{
+    //callGraphApi('result','ownedObjects','');
+    //	callGraphApi('result','ownedObjects?$select=id,displayName','');
+    //	callGraphApi('result','users?$filter=startswith(mail,\'john.doe\')&$select=id,mail','');
+  }
+
+  // Utility function to display a message for some number of seconds
+  function showMsgNSecs (alertclass, message, numsecs)
+  {
     document.getElementById('message').className = "alert "+alertclass;
     document.getElementById('message').innerHTML = message;
     document.getElementById('message').style = 'visibility:visible';
 
     setTimeout(function(){
-	document.getElementById('message').className = "alert alert-info ";
-	document.getElementById('message').innerHTML = 'Click on the Groups to Add or Remove them from user';
-	document.getElementById('message').style = 'visibility:hidden';
+      document.getElementById('message').className = "alert alert-info ";
+      document.getElementById('message').innerHTML = 'Click on the Groups to Add or Remove them from user';
+      document.getElementById('message').style = 'visibility:hidden';
     }, numsecs*1000);
-}
+  }
