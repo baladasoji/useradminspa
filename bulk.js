@@ -132,31 +132,6 @@ function removeUserFromGroup (userid, groupid)
     apiXMLReq.send(userm);
   }
 
-  function callGraphApi(element, url, token)
-  {
-    var apiXMLReq = new XMLHttpRequest();
-    apiXMLReq.onreadystatechange = function() {
-      if (this.readyState == 4)
-      {
-        ht='<table>';
-        res = JSON.parse(apiXMLReq.responseText).value;
-        for (var item in res)
-        {
-          //console.log(res[item]);
-          ht = ht + '<tr><td>' + res[item].displayName + '</td><td>'+ res[item].mail + '</td><td>'+ res[item].id + '</td></tr>' ;
-
-        }
-        ht=ht+ '</table>';
-        document.getElementById(element).innerHTML = ht;
-
-      }
-    };
-    apiXMLReq.open("GET", graph_url + url , true );
-    apiXMLReq.setRequestHeader("Authorization","Bearer "+token);
-    apiXMLReq.send(null);
-
-  }
-
   function callUserApi(element, url, token)
   {
     var apiXMLReq = new XMLHttpRequest();
@@ -212,85 +187,6 @@ function removeUserFromGroup (userid, groupid)
 
   }
 
-  /*
-  function populateGroups (grparray)
-  {
-  var pkggrp = document.getElementById('packagegrp');
-  var inheritedgrp = document.getElementById('inheritedgrp');
-  var additionalgrp = document.getElementById('additionalgrp');
-  cleanUpElement(pkggrp);
-  cleanUpElement(inheritedgrp);
-  cleanUpElement(additionalgrp);
-  for (item in grparray)
-  {
-  var col = document.createElement("BUTTON");
-  col.className = "mt-1 btn group btn-block btn-secondary " + grparray[item].displayclass ;
-  col.id = grparray[item].id ;
-  col.innerText = grparray[item].Name.substr(13) ;
-  col.setAttribute("width","100%");
-  var type = grparray[item].type;
-  col.setAttribute("type",type);
-  if ( type === "package")
-  {
-  col.addEventListener('click', function() {
-  //console.log(this.id);
-  if (this.className.includes("btn-secondary"))
-  {
-  assignUserToGroup ( this.id);
-}
-else
-{
-removeUserFromGroup(this.id);
-}
-});
-packagegrp.appendChild(col);
-
-}
-else if ( type === "included")
-{
-inheritedgrp.appendChild(col);
-}
-else if ( type === "additional")
-{
-col.addEventListener('click', function() {
-//console.log(this.id);
-if (this.className.includes("btn-secondary"))
-{
-assignUserToGroup ( this.id );
-}
-else
-{
-removeUserFromGroup( this.id);
-}
-});
-additionalgrp.appendChild(col);
-}
-}
-
-}
-
-*/
-
-// This function resets the color of all the groups to unassigned color
-function resetColorOfGroups()
-{
-  var grptds= document.getElementsByClassName("group");
-  for (t in grptds)
-  {
-    if (grptds[t].className != null)
-    {
-      cn = grptds[t].className;
-      grptds[t].className= cn.replace("btn-success","btn-secondary");
-    }
-  }
-}
-
-
-
-function getMyOwnedGroups()
-{
-  callGraphApi('ownedgroups','me/ownedObjects?$select=id,displayName',access_token);
-}
 
 function getUsersWithEmail()
 {
@@ -336,8 +232,6 @@ function changeEnvironment()
     currentEnvGroups = PRODGroups;
   }
   currentPkgGroup = getSubGroups(currentEnvGroups, currentEnv , "package")[0];
-  //    populateGroups( currentEnvGroups );
-  //    checkUserGroups();
 
 }
 
@@ -450,8 +344,6 @@ function showMsgNSecs (alertclass, message, numsecs)
   document.getElementById('message').style = 'visibility:visible';
 
   setTimeout(function(){
-    document.getElementById('message').className = "alert alert-info ";
-    document.getElementById('message').innerHTML = 'Click on the Groups to Add or Remove them from user';
     document.getElementById('message').style = 'visibility:hidden';
   }, numsecs*1000);
 }
