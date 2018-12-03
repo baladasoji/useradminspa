@@ -3,7 +3,6 @@ var graph_url = "https://graph.microsoft.com/v1.0/";
 var graph_url_groups = "https://graph.microsoft.com/v1.0/groups";
 var graph_url_users = "https://graph.microsoft.com/v1.0/users";
 var user;
-var grp_memberships;
 var access_token='';
 var currentEnvGroups=[];
 var currentEnv='';
@@ -176,18 +175,7 @@ function removeUserFromGroup (userid, groupid)
 
   }
 
-
-  function cleanUpElement(element)
-  {
-    while (element.firstChild)
-    {
-      //console.log("removing "+element.firstChild);
-      element.firstChild.remove();
-    }
-
-  }
-
-
+  
 function getUsersWithEmail()
 {
   if (currentEnv == null || currentEnv == "" || currentEnv == "NONE" )
