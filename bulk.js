@@ -175,7 +175,7 @@ function removeUserFromGroup (userid, groupid)
 
   }
 
-  
+
 function getUsersWithEmail()
 {
   if (currentEnv == null || currentEnv == "" || currentEnv == "NONE" )
@@ -219,6 +219,7 @@ function changeEnvironment()
   {
     currentEnvGroups = PRODGroups;
   }
+  cleanUpElement('userresult');
   currentPkgGroup = getSubGroups(currentEnvGroups, currentEnv , "package")[0];
 
 }
