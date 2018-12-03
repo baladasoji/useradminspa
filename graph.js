@@ -1,27 +1,28 @@
-//var graph_url = "https://graph.microsoft.com/v1.0/users/bd3298eb-8cde-49ea-b6c0-cff6ad1c4b1c/";
+
 var graph_url = "https://graph.microsoft.com/v1.0/";
 var graph_url_groups = "https://graph.microsoft.com/v1.0/groups";
 var graph_url_users = "https://graph.microsoft.com/v1.0/users";
 var user;
-var grp_memberships;
 var access_token='';
 var currentEnvGroups=[];
 var currentEnv='';
 var ownedgroups=[];
-
-var res='';
+//var res='';
 
 
 // Removes the curent active user from the group
 function removeUserFromGroup ( groupid)
 {
+  // Find out what type of group are we removing from the user
   var included=false;
   included=getSubGroups(currentEnvGroups, currentEnv , "included").includes(groupid);
   var pkg = false;
   pkg=getSubGroups(currentEnvGroups, currentEnv , "package").includes(groupid);
   var additional = false;
   additional=getSubGroups(currentEnvGroups, currentEnv , "additional").includes(groupid);
+  // Package group requires more time to be removed as it involves the included groups. Hence set a higher timeout for package group
   var timeout = pkg ? 5 : 1;
+  // If we got a package group then we need to remove all the included groups too..
   if (pkg)
   {
     //alert ('got a package group');
@@ -31,11 +32,7 @@ function removeUserFromGroup ( groupid)
       removeUserFromGroup (sgrp[grp]);
     }
   }
-  var included=false;
-  if (getSubGroups(currentEnvGroups, currentEnv , "included").includes(groupid))
-  {
-    included = true;
-  }
+
   userid = user.id;
   url = `/${groupid}/members/${userid}/$ref`;
   var apiXMLReq = new XMLHttpRequest();
@@ -79,7 +76,7 @@ function removeUserFromGroup ( groupid)
 
   function assignUserToGroup ( groupid)
   {
-
+    // Find out what type of group are we adding to the user
     var included=false;
     included=getSubGroups(currentEnvGroups, currentEnv , "included").includes(groupid);
     var pkg = false;
@@ -87,7 +84,7 @@ function removeUserFromGroup ( groupid)
     var additional = false;
     additional=getSubGroups(currentEnvGroups, currentEnv , "additional").includes(groupid);
     var timeout = pkg ? 5 : 1;
-    // Treat package groups differently
+    // If we got a package group then we need to add all the included groups too..
     if (pkg)
     {
       //	alert ('got a package group');
@@ -125,7 +122,7 @@ function removeUserFromGroup ( groupid)
     apiXMLReq.setRequestHeader("Content-type","application/json");
     apiXMLReq.send(userm);
   }
-
+  // Old method not used - Only here for reference
   function callGraphApi(element, url, token)
   {
     var apiXMLReq = new XMLHttpRequest();
@@ -159,6 +156,7 @@ function removeUserFromGroup ( groupid)
       {
         if (this.status == 200)
         {
+          // Most likely we only get one result - In case of multiple we just pick the first one.
           user = JSON.parse(apiXMLReq.responseText).value[0];
           document.getElementById('userdisplayname').innerText = user.displayName;
           document.getElementById('useremail').innerText = user.mail;
@@ -252,7 +250,7 @@ function removeUserFromGroup ( groupid)
   }
 
 
-
+  // Method not used at present - available for reference
   function getMyOwnedGroups()
   {
     url='me/ownedObjects?$select=id,displayName';
@@ -269,7 +267,7 @@ function removeUserFromGroup ( groupid)
             ownedgroups.push(res[item].id);
 
           }
-//          console.log(ownedgroups);
+          //console.log(ownedgroups);
 
         }
         else if (this.status == 401)
@@ -301,7 +299,7 @@ function removeUserFromGroup ( groupid)
   function changeEnvironment()
   {
     currentEnv = this.value;
-    console.log("Current environment is "+currentEnv);
+    //console.log("Current environment is "+currentEnv);
     if (currentEnv === "NONE")
     {
       return;
@@ -326,12 +324,9 @@ function removeUserFromGroup ( groupid)
 
   }
 
-// This function checks if the logged in user is an owner of all the current environment Groups
+  // This function checks if the logged in user is an owner of all the current environment Groups
   function checkIfOwner()
   {
-    //console.log(ownedgroups);
-    //console.log(currentEnvGroups);
-    //envgrpid = currentEnvGroups.map(grp, grp => id);
     Array.prototype.diff = function(a) {
       return this.filter(function(i) {return a.indexOf(i) < 0;});
     };
@@ -352,7 +347,7 @@ function removeUserFromGroup ( groupid)
   {
     if (user != null)
     {
-      groupids = curenvids=currentEnvGroups.map(i => i.id);
+      groupids = currentEnvGroups.map(i => i.id);
       //console.log(groupids);
       pmsg = "{" + JSON.stringify("groupIds") + ":" + JSON.stringify(groupids) + "}";
       //console.log(pmsg);
@@ -372,7 +367,7 @@ function removeUserFromGroup ( groupid)
               document.getElementById(usergrps[ugrp]).className=cn.replace("btn-secondary","btn-success");
             }
           }
-          else
+          else if (this.status == 401)
           {
             responseJson = JSON.parse(apiXMLReq.responseText);
             handle401(responseJson)
@@ -407,10 +402,8 @@ function removeUserFromGroup ( groupid)
     document.getElementById('message').className = "alert "+alertclass;
     document.getElementById('message').innerHTML = message;
     document.getElementById('message').style = 'visibility:visible';
-
+    // Hide the message after displaying it for numsecs
     setTimeout(function(){
-      document.getElementById('message').className = "alert alert-info ";
-      document.getElementById('message').innerHTML = 'Click on the Groups to Add or Remove them from user';
       document.getElementById('message').style = 'visibility:hidden';
     }, numsecs*1000);
   }
