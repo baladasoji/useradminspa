@@ -63,9 +63,10 @@ function getSubGroups(ingroup , env, type)
 
 function cleanUpElement(element)
 {
+  //console.log(" inside cleanup " +element);
   while (element.firstChild)
   {
-    //	console.log("removing "+element.firstChild);
+    //console.log("removing "+element.firstChild);
     element.firstChild.remove();
   }
 }

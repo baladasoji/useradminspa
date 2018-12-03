@@ -219,7 +219,7 @@ function changeEnvironment()
   {
     currentEnvGroups = PRODGroups;
   }
-  cleanUpElement('userresult');
+  cleanUpElement(document.getElementById('userresult'));
   currentPkgGroup = getSubGroups(currentEnvGroups, currentEnv , "package")[0];
 
 }
