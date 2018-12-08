@@ -18,11 +18,6 @@
     return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [null, ''])[1].replace(/\+/g, '%20')) || null;
   }
 
-  function startup(){
-
-    document.getElementById('settoken').addEventListener('click', store);
-  }
-
   function store(){
 
       access_token = getURLParameter("access_token");
@@ -30,33 +25,19 @@
           document.getElementById("message").innerHTML = "No Token present redirecting to Azure AD for authentication";
           setTimeout(function(){
               window.location.href = "https://login.microsoftonline.com/maersk.onmicrosoft.com/oauth2/v2.0/authorize?response_mode=fragment&nonce=987234&client_id=08d64f11-9c8a-4a08-a737-022b04c0b9a9&response_type=token&redirect_uri=https%3A%2F%2Fportaluseradmin.azurewebsites.net%2Findex.html&state=0237840987234&scope=openid%20profile" ;
-          }, 2000);
+          }, 1000);
 
 
       }
       else{
-          document.getElementById("message").innerHTML = "Obtained the token from Auth provoder will store the token in browser storage and redirect to the Admin page <br><br> " +access_token;
+          document.getElementById("message").innerHTML = "Obtained the token from Auth provider redirecting to the Admin page " ;
           sessionStorage.access_token = access_token;
           setTimeout(function(){
-              window.location.href = "admin.html";
+              window.location.href = "basicadmin.html";
           }, 1000);
       }
   }
 
-  function storeToken()
-  {
-    access_token = document.getElementById("token").value ;
-    if (access_token == null || access_token.length == 0){
-      document.getElementById("message").innerHTML = "Error setting the token. Please provide a valid token ";
-    }
-    else{
-      document.getElementById("message").innerHTML = "Token set successfully Redirecting to admin page .. <br><br> " +access_token;
-      sessionStorage.access_token = access_token;
-      setTimeout(function(){
-        window.location.href = "admin.html";
-      }, 2000);
-    }
-  }
 </script>
 
 </head>
@@ -65,8 +46,8 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="navbar-nav">
           <a class="nav-item nav-link h3 active" href="index.html">Home</a>
-          <a class="nav-item nav-link h3" href="admin.html">Single User Administration</a>
-          <a class="nav-item nav-link h3" href="bulk.html">Bulk user Administration</a>
+          <a class="nav-item nav-link h3" href="basicadmin.html">Basic user Administration</a>
+          <a class="nav-item nav-link h3" href="advanced.html">Advanced User Administration</a>
         </div>
     </nav>
   <div class="jumbotron">
