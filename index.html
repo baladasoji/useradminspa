@@ -23,10 +23,6 @@
     document.getElementById('settoken').addEventListener('click', store);
   }
 
-  function getURLParameter(name) {
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [null, ''])[1].replace(/\+/g, '%20')) || null;
-  }
-
   function store(){
 
       access_token = getURLParameter("access_token");
@@ -34,7 +30,7 @@
           document.getElementById("message").innerHTML = "No Token present redirecting to authentication provider";
           setTimeout(function(){
               window.location.href = "https://login.microsoftonline.com/maersk.onmicrosoft.com/oauth2/v2.0/authorize?response_mode=fragment&nonce=987234&client_id=08d64f11-9c8a-4a08-a737-022b04c0b9a9&response_type=token&redirect_uri=https%3A%2F%2Fportaluseradmin.azurewebsites.net%2Findex.html&state=0237840987234&scope=openid%20profile" ;
-          }, 2000);
+          }, 10000);
 
 
       }
@@ -77,17 +73,8 @@
     <div class="container">
       <h1 class="display-4">Portal User management - Graph API</h1>
       <p>This application needs an access token for graph API.</p>
-      <form>
-        <div class="row">
-          <div class="col-xl-6">
-            <input type="text" id="token" class="form-control" placeholder="Paste token here"> </input>
-          </div>
-          <div class="col-xl-6">
-            <a href="#" class="btn btn-info" role="button" id="settoken" > Set Access Token </a>
-          </div>
-        </div>
-      </form>
-      <p id="message"> </p>
+
+      <p class="display-4" id="message"> </p>
     </div>
   </div>
 </body>
