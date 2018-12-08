@@ -20,9 +20,32 @@
 
   function startup(){
 
-    document.getElementById('settoken').addEventListener('click', storeToken);
+    document.getElementById('settoken').addEventListener('click', store);
   }
 
+  function getURLParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+  }
+
+  function store(){
+
+      access_token = getURLParameter("token");
+      if (access_token == null || access_token.length == 0){
+          document.getElementById("message").innerHTML = "No Token present redirecting to authentication provider";
+          setTimeout(function(){
+              window.location.href = "https://login.microsoftonline.com/maersk.onmicrosoft.com/oauth2/v2.0/authorize?response_mode=fragment&nonce=987234&client_id=08d64f11-9c8a-4a08-a737-022b04c0b9a9&response_type=token&redirect_uri=https%3A%2F%2Fportaluseradmin.azurewebsites.net%2Findex.html&state=0237840987234&scope=openid%20profile" ;
+          }, 2000);
+
+
+      }
+      else{
+          document.getElementById("message").innerHTML = "Obtained the token from Auth provoder will store the token in browser storage and redirect to the Admin page <br><br> " +access_token;
+          sessionStorage.access_token = access_token;
+          setTimeout(function(){
+              window.location.href = "admin.html";
+          }, 3000);
+      }
+  }
 
   function storeToken()
   {
@@ -41,7 +64,7 @@
 </script>
 
 </head>
-<body onload="startup()">
+<body onload="store()">
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="navbar-nav">
