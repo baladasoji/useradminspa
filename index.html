@@ -29,7 +29,7 @@
 
   function store(){
 
-      access_token = getURLParameter("token");
+      access_token = getURLParameter("access_token");
       if (access_token == null || access_token.length == 0){
           document.getElementById("message").innerHTML = "No Token present redirecting to authentication provider";
           setTimeout(function(){
