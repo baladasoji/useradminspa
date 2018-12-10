@@ -219,11 +219,31 @@ function changeEnvironment()
   {
     currentEnvGroups = PRODGroups;
   }
-  cleanUpElement(document.getElementById('userresult'));
-  currentPkgGroup = getSubGroups(currentEnvGroups, currentEnv , "package")[0];
+  if (checkIfOwner())
+  {
+    cleanUpElement(document.getElementById('userresult'));
+    currentPkgGroup = getSubGroups(currentEnvGroups, currentEnv , "package")[0];
+  }
 
 }
 
+// This function checks if the logged in user is an owner of all the current environment Groups
+function checkIfOwner()
+{
+  Array.prototype.diff = function(a) {
+    return this.filter(function(i) {return a.indexOf(i) < 0;});
+  };
+  curenvids=currentEnvGroups.map(i => i.id);
+  notownedgroups = curenvids.diff(ownedgroups);
+  notownedgroupnames = currentEnvGroups.filter(n => notownedgroups.includes(n.id)).map(i => i.Name);
+  if (notownedgroupnames.length > 0)
+  {
+    msg = "You are not an owner of the following groups in Azure AD. Please correct this first " + notownedgroupnames;
+    showMsgNSecs ('alert-danger', msg, 10);
+    return false;
+  }
+  return true;
+}
 // This function obtains the list of groups a user is in and updates the color coding of the groups based on the user membership
 function checkUserInGroup(userid, groupid)
 {
