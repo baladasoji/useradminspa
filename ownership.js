@@ -7,46 +7,24 @@ var access_token='';
 
 
 // Removes the curent active user from the group
-function removeUserFromGroup ( groupid)
+function removeOwnerFromGroup ( groupid)
 {
-  // Find out what type of group are we removing from the user
-  var included=false;
-  included=getSubGroups(currentEnvGroups, currentEnv , "included").includes(groupid);
-  var pkg = false;
-  pkg=getSubGroups(currentEnvGroups, currentEnv , "package").includes(groupid);
-  var additional = false;
-  additional=getSubGroups(currentEnvGroups, currentEnv , "additional").includes(groupid);
-  // Package group requires more time to be removed as it involves the included groups. Hence set a higher timeout for package group
-  var timeout = pkg ? 5 : 1;
-  // If we got a package group then we need to remove all the included groups too..
-  if (pkg)
-  {
-    //alert ('got a package group');
-    sgrp = getSubGroups(currentEnvGroups, currentEnv, "included") ;
-    for (grp in sgrp)
-    {
-      removeUserFromGroup (sgrp[grp]);
-    }
-  }
-
+  var timeout=1;
   userid = user.id;
-  url = `${groupid}/members/${userid}/$ref`;
+  url = `${groupid}/owners/${userid}/$ref`;
   var apiXMLReq = new XMLHttpRequest();
   apiXMLReq.onreadystatechange = function() {
     if (this.readyState == 4)
     {
       if (this.status == 204)
       {
-        if (!included)
-        {
-          showMsgNSecs('alert-info','Removing group from user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
+          showMsgNSecs('alert-info','Removing group ownership from user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
           setTimeout(function()
           {
-            checkUserGroups();
+            checkOwnerGroups();
           }, timeout*1000);
-        }
       }
-      if (this.status == 401)
+      else if (this.status == 401)
       {
         responseJson = JSON.parse(apiXMLReq.responseText);
         handle401(responseJson)
@@ -61,44 +39,23 @@ function removeUserFromGroup ( groupid)
 
   // Assigns the current active user to the group
 
-  function assignUserToGroup ( groupid)
+  function assignOwnerToGroup ( groupid)
   {
-    // Find out what type of group are we adding to the user
-    var included=false;
-    included=getSubGroups(currentEnvGroups, currentEnv , "included").includes(groupid);
-    var pkg = false;
-    pkg=getSubGroups(currentEnvGroups, currentEnv , "package").includes(groupid);
-    var additional = false;
-    additional=getSubGroups(currentEnvGroups, currentEnv , "additional").includes(groupid);
-    var timeout = pkg ? 5 : 1;
-    // If we got a package group then we need to add all the included groups too..
-    if (pkg)
-    {
-      //	alert ('got a package group');
-      sgrp = getSubGroups(currentEnvGroups, currentEnv, "included") ;
-      for (grp in sgrp)
-      {
-        assignUserToGroup (sgrp[grp]);
-      }
-    }
-
-    url = `${groupid}/members/$ref`;
+    var timeout=1;
+    url = `${groupid}/owners/$ref`;
     userid = user.id;
     userm = `{ "@odata.id": "https://graph.microsoft.com/v1.0/directoryObjects/${userid}" }` ;
     var apiXMLReq = new XMLHttpRequest();
     apiXMLReq.onreadystatechange = function() {
       if (this.status == 204)
       {
-        if (!included)
+        showMsgNSecs('alert-info','Adding group ownership to user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
+        setTimeout(function()
         {
-          showMsgNSecs('alert-info','Adding group to user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
-          setTimeout(function()
-          {
-            checkUserGroups();
-          }, timeout*1000);
-        }
+          checkOwnerGroups();
+        }, timeout*1000);
       }
-      if (this.status == 401)
+      else if (this.status == 401)
       {
         responseJson = JSON.parse(apiXMLReq.responseText);
         handle401(responseJson)
@@ -108,31 +65,6 @@ function removeUserFromGroup ( groupid)
     apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
     apiXMLReq.setRequestHeader("Content-type","application/json");
     apiXMLReq.send(userm);
-  }
-  // Old method not used - Only here for reference
-  function callGraphApi(element, url, token)
-  {
-    var apiXMLReq = new XMLHttpRequest();
-    apiXMLReq.onreadystatechange = function() {
-      if (this.readyState == 4)
-      {
-        ht='<table>';
-        res = JSON.parse(apiXMLReq.responseText).value;
-        for (var item in res)
-        {
-          //console.log(res[item]);
-          ht = ht + '<tr><td>' + res[item].displayName + '</td><td>'+ res[item].mail + '</td><td>'+ res[item].id + '</td></tr>' ;
-
-        }
-        ht=ht+ '</table>';
-        document.getElementById(element).innerHTML = ht;
-
-      }
-    };
-    apiXMLReq.open("GET", graph_url + url , true );
-    apiXMLReq.setRequestHeader("Authorization","Bearer "+token);
-    apiXMLReq.send(null);
-
   }
 
   function callUserApi(element, url, token)
@@ -150,7 +82,7 @@ function removeUserFromGroup ( groupid)
           document.getElementById('userresult').style = 'display:show';
           //document.getElementById('userid').innerText = user.id;
           document.getElementById('allgroups').style = 'display:show';
-          checkUserGroups();
+          checkOwnerGroups();
         }
         if (this.status == 401)
         {
@@ -168,58 +100,30 @@ function removeUserFromGroup ( groupid)
 
   function populateGroups (grparray)
   {
-    var pkggrp = document.getElementById('packagegrp');
-    var inheritedgrp = document.getElementById('inheritedgrp');
-    var additionalgrp = document.getElementById('additionalgrp');
-    cleanUpElement(pkggrp);
-    cleanUpElement(inheritedgrp);
-    cleanUpElement(additionalgrp);
+    var allgrp = document.getElementById('allgroups');
+    cleanUpElement(allgrp);
     for (var item = 0; item < grparray.length; item++)
     {
       var col = document.createElement("BUTTON");
-      col.className = "mt-1 btn group btn-block btn-secondary " + grparray[item].displayclass ;
+      col.className = "mt-1 btn group btn-block btn-secondary";
       col.id = grparray[item].id ;
       col.innerText = grparray[item].Name.substr(13) ;
       col.setAttribute("width","100%");
       var type = grparray[item].type;
       col.setAttribute("type",type);
-      if ( type === "package")
-      {
-        col.addEventListener('click', function() {
+      col.addEventListener('click', function() {
           //console.log(this.id);
           if (this.className.includes("btn-secondary"))
           {
-            assignUserToGroup ( this.id);
+            assignOwnerToGroup ( this.id);
           }
           else
           {
-            removeUserFromGroup(this.id);
+            removeOwnerFromGroup( this.id);
           }
-        });
-        packagegrp.appendChild(col);
-
-      }
-      else if ( type === "included")
-      {
-        inheritedgrp.appendChild(col);
-      }
-      else if ( type === "additional")
-      {
-        col.addEventListener('click', function() {
-          //console.log(this.id);
-          if (this.className.includes("btn-secondary"))
-          {
-            assignUserToGroup ( this.id);
-          }
-          else
-          {
-            removeUserFromGroup( this.id);
-          }
-        });
-        additionalgrp.appendChild(col);
-      }
+      });
+      allgrp.appendChild(col);
     }
-
   }
 
   // This function resets the color of all the groups to unassigned color
@@ -276,7 +180,7 @@ function removeUserFromGroup ( groupid)
     if (checkIfOwner())
     {
       populateGroups( currentEnvGroups );
-      checkUserGroups();
+      checkOwnerGroups();
     }
 
   }
@@ -300,41 +204,17 @@ function removeUserFromGroup ( groupid)
   }
 
   // This function obtains the list of groups a user is in and updates the color coding of the groups based on the user membership
-  function checkUserGroups()
+  function checkOwnerGroups()
   {
     if (user != null)
     {
-      groupids = currentEnvGroups.map(i => i.id);
-      //console.log(groupids);
-      pmsg = "{" + JSON.stringify("groupIds") + ":" + JSON.stringify(groupids) + "}";
-      //console.log(pmsg);
-      var apiXMLReq = new XMLHttpRequest();
-      apiXMLReq.onreadystatechange = function() {
-        if (this.readyState == 4)
-        {
-          // Once you get response from the call then reset the color of groups
-          resetColorOfGroups();
-          if (this.status == 200)
-          {
-            usergrps = JSON.parse(apiXMLReq.responseText).value;
-            //	document.getElementById('usergrp').innerText = usergrps;
-            for (ugrp=0; ugrp<usergrps.length; ugrp++)
-            {
-              cn = document.getElementById(usergrps[ugrp]).className;
-              document.getElementById(usergrps[ugrp]).className=cn.replace("btn-secondary","btn-success");
-            }
-          }
-          else if (this.status == 401)
-          {
-            responseJson = JSON.parse(apiXMLReq.responseText);
-            handle401(responseJson)
-          }
-        }
-      };
-      apiXMLReq.open("POST", graph_url_users + "/" + user.id + "/checkMemberGroups" , true );
-      apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
-      apiXMLReq.setRequestHeader("Content-type","application/json");
-      apiXMLReq.send(pmsg);
+      curenvids=currentEnvGroups.map(i => i.id);
+      resetColorOfGroups();
+      for (i=0; i<curenvids.length; i++)
+      {
+        checkIfGroupOwner(curenvids[i], user.id);
+      }
+
     }
 
   }

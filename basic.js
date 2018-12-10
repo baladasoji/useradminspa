@@ -1,7 +1,5 @@
 //var graph_url = "https://graph.microsoft.com/v1.0/users/bd3298eb-8cde-49ea-b6c0-cff6ad1c4b1c/";
-var graph_url = "https://graph.microsoft.com/v1.0/";
-var graph_url_groups = "https://graph.microsoft.com/v1.0/groups";
-var graph_url_users = "https://graph.microsoft.com/v1.0/users";
+
 var user;
 var access_token='';
 
@@ -29,7 +27,7 @@ function removeUserFromGroup (userid, groupid)
       removeUserFromGroup (userid, sgrp[grp]);
     }
   }
-  url = `/${groupid}/members/${userid}/$ref`;
+  url = `${groupid}/members/${userid}/$ref`;
   var apiXMLReq = new XMLHttpRequest();
   apiXMLReq.onreadystatechange = function() {
     if (this.readyState == 4)
@@ -88,7 +86,7 @@ function removeUserFromGroup (userid, groupid)
       }
     }
 
-    url = `/${groupid}/members/$ref`;
+    url = `${groupid}/members/$ref`;
     userm = `{ "@odata.id": "https://graph.microsoft.com/v1.0/directoryObjects/${userid}" }` ;
     var apiXMLReq = new XMLHttpRequest();
     apiXMLReq.onreadystatechange = function() {

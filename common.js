@@ -1,4 +1,7 @@
 
+var graph_url = "https://graph.microsoft.com/v1.0/";
+var graph_url_groups = "https://graph.microsoft.com/v1.0/groups/";
+var graph_url_users = "https://graph.microsoft.com/v1.0/users";
 var CDTGroups = [
   {"Name":"MaerskPortal-InternalAccessPackage (Test)","Env":"CDT", "id" :"997432aa-f3ae-4d41-9805-ac5ca58900e0", "type":"package","displayclass":" active" },
   {"Name":"MaerskPortal-SelectAnyCustomer (Test)","Env":"CDT", "id" :"5caad941-0fdf-4eb6-b863-6c205e7a7aa4", "type":"included","displayclass":" disabled ml-4 " },
@@ -47,7 +50,6 @@ var STAGEGroups = [
   {"Name":"MaerskPortal-ImportCSA (Stage)","Env":"STAGE", "id" :"60d8066a-ea75-40dd-b30c-185d8ad575bb", "type":"additional","displayclass":" active  " }
 ];
 var ownedgroups=[];
-
 var currentEnvGroups=[];
 var currentEnv='';
 var currentPkgGroup='';
@@ -75,10 +77,14 @@ function cleanUpElement(element)
   }
 }
 
-
 function getMyOwnedGroups()
 {
-  url='me/ownedObjects?$select=id,displayName';
+  getOwnedGroups('me');
+}
+
+function getOwnedGroups(userid)
+{
+  url=userid+'/ownedObjects?$select=id,displayName';
   ownedgroups = [];
   var apiXMLReq = new XMLHttpRequest();
   apiXMLReq.onreadystatechange = function() {
@@ -86,27 +92,59 @@ function getMyOwnedGroups()
     {
       if (this.status == 200)
       {
-
         res = JSON.parse(apiXMLReq.responseText).value;
         for (var item in res)
         {
           ownedgroups.push(res[item].id);
-
         }
         //console.log(ownedgroups);
-
       }
       else if (this.status == 401)
       {
         responseJson = JSON.parse(apiXMLReq.responseText);
         handle401(responseJson)
       }
-
     }
   };
   apiXMLReq.open("GET", graph_url + url , true );
   apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
   apiXMLReq.send(null);
+}
+
+function checkIfGroupOwner(groupid,userid)
+{
+  url= groupid + "/owners" ;
+  var apiXMLReq = new XMLHttpRequest();
+  apiXMLReq.onreadystatechange = function() {
+    if (this.readyState == 4)
+    {
+      if (this.status == 200)
+      {
+        res = JSON.parse(apiXMLReq.responseText).value;
+        owners=[];
+        for (i=0; i< res.length; i++)
+        {
+          owners.push(res[i].id);
+        }
+        //console.log(owners);
+        if (owners.includes(userid))
+        {
+          cn = document.getElementById(groupid).className;
+          document.getElementById(groupid).className=cn.replace("btn-secondary","btn-success");
+        }
+      }
+      else if (this.status == 401)
+      {
+        responseJson = JSON.parse(apiXMLReq.responseText);
+        handle401(responseJson);
+        return false;
+      }
+    }
+  };
+  apiXMLReq.open("GET", graph_url_groups + url , true );
+  apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
+  apiXMLReq.send(null);
+
 }
 
 
