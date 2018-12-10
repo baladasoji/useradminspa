@@ -177,9 +177,9 @@ function getUsersWithEmail()
     cleanUpElement(document.getElementById('userresult'));
     allemailsstr=  document.getElementById('emails').value;
     emails = allemailsstr.split("\n");
-    for (email in emails)
+    for (i=0; i<emails.length; i++)
     {
-      curmail = emails[email];
+      curmail = emails[i];
       if (curmail.trim() != "")
       {
         //console.log(emails[email]);
