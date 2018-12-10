@@ -46,7 +46,11 @@ var STAGEGroups = [
   {"Name":"MaerskPortal-SAPBankPayments (Stage)","Env":"STAGE", "id" :"b2219c53-c10c-4572-aeb2-f2d4e817abb8", "type":"additional","displayclass":" active  " },
   {"Name":"MaerskPortal-ImportCSA (Stage)","Env":"STAGE", "id" :"60d8066a-ea75-40dd-b30c-185d8ad575bb", "type":"additional","displayclass":" active  " }
 ];
+var ownedgroups=[];
 
+var currentEnvGroups=[];
+var currentEnv='';
+var currentPkgGroup='';
 
 function getSubGroups(ingroup , env, type)
 {
@@ -70,3 +74,58 @@ function cleanUpElement(element)
     element.firstChild.remove();
   }
 }
+
+
+function getMyOwnedGroups()
+{
+  url='me/ownedObjects?$select=id,displayName';
+  ownedgroups = [];
+  var apiXMLReq = new XMLHttpRequest();
+  apiXMLReq.onreadystatechange = function() {
+    if (this.readyState == 4)
+    {
+      if (this.status == 200)
+      {
+
+        res = JSON.parse(apiXMLReq.responseText).value;
+        for (var item in res)
+        {
+          ownedgroups.push(res[item].id);
+
+        }
+        //console.log(ownedgroups);
+
+      }
+      else if (this.status == 401)
+      {
+        responseJson = JSON.parse(apiXMLReq.responseText);
+        handle401(responseJson)
+      }
+
+    }
+  };
+  apiXMLReq.open("GET", graph_url + url , true );
+  apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
+  apiXMLReq.send(null);
+}
+
+
+
+  function handle401(responseJson)
+  {
+    msg = responseJson.error.code ;
+    msg = msg+ " - " + responseJson.error.message ;
+    msg = msg+ " <BR> Click <a href='index.html'> here </a> to Login" ;
+    showMsgNSecs('alert-danger',msg, 10);
+  }
+
+  function showMsgNSecs (alertclass, message, numsecs)
+  {
+    document.getElementById('message').className = "alert "+alertclass;
+    document.getElementById('message').innerHTML = message;
+    document.getElementById('message').style = 'visibility:visible';
+
+    setTimeout(function(){
+      document.getElementById('message').style = 'visibility:hidden';
+    }, numsecs*1000);
+  }

@@ -4,9 +4,7 @@ var graph_url_groups = "https://graph.microsoft.com/v1.0/groups";
 var graph_url_users = "https://graph.microsoft.com/v1.0/users";
 var user;
 var access_token='';
-var currentEnvGroups=[];
-var currentEnv='';
-var ownedgroups=[];
+
 //var res='';
 
 
@@ -60,15 +58,6 @@ function removeUserFromGroup ( groupid)
     apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
     apiXMLReq.setRequestHeader("Content-type","application/json");
     apiXMLReq.send(null);
-  }
-
-
-  function handle401(responseJson)
-  {
-    msg = responseJson.error.code ;
-    msg = msg+ " - " + responseJson.error.message ;
-    msg = msg+ " <BR> Click <a href='index.html'> here </a> to Login" ;
-    showMsgNSecs('alert-danger',msg, 10);
   }
 
 
@@ -250,38 +239,8 @@ function removeUserFromGroup ( groupid)
   }
 
 
-  // Method not used at present - available for reference
-  function getMyOwnedGroups()
-  {
-    url='me/ownedObjects?$select=id,displayName';
-    var apiXMLReq = new XMLHttpRequest();
-    apiXMLReq.onreadystatechange = function() {
-      if (this.readyState == 4)
-      {
-        if (this.status == 200)
-        {
 
-          res = JSON.parse(apiXMLReq.responseText).value;
-          for (var item in res)
-          {
-            ownedgroups.push(res[item].id);
 
-          }
-          //console.log(ownedgroups);
-
-        }
-        else if (this.status == 401)
-        {
-          responseJson = JSON.parse(apiXMLReq.responseText);
-          handle401(responseJson)
-        }
-
-      }
-    };
-    apiXMLReq.open("GET", graph_url + url , true );
-    apiXMLReq.setRequestHeader("Authorization","Bearer "+access_token);
-    apiXMLReq.send(null);
-  }
 
   function getUserWithEmail()
   {
@@ -394,16 +353,4 @@ function removeUserFromGroup ( groupid)
     //callGraphApi('result','ownedObjects','');
     //	callGraphApi('result','ownedObjects?$select=id,displayName','');
     //	callGraphApi('result','users?$filter=startswith(mail,\'john.doe\')&$select=id,mail','');
-  }
-
-  // Utility function to display a message for some number of seconds
-  function showMsgNSecs (alertclass, message, numsecs)
-  {
-    document.getElementById('message').className = "alert "+alertclass;
-    document.getElementById('message').innerHTML = message;
-    document.getElementById('message').style = 'visibility:visible';
-    // Hide the message after displaying it for numsecs
-    setTimeout(function(){
-      document.getElementById('message').style = 'visibility:hidden';
-    }, numsecs*1000);
   }

@@ -4,9 +4,7 @@ var graph_url_groups = "https://graph.microsoft.com/v1.0/groups";
 var graph_url_users = "https://graph.microsoft.com/v1.0/users";
 var user;
 var access_token='';
-var currentEnvGroups=[];
-var currentEnv='';
-var currentPkgGroup='';
+
 
 var res='';
 
@@ -65,14 +63,6 @@ function removeUserFromGroup (userid, groupid)
     apiXMLReq.send(null);
   }
 
-
-  function handle401(responseJson)
-  {
-    msg = responseJson.error.code ;
-    msg = msg+ " - " + responseJson.error.message ;
-    msg = msg+ " <BR> Click <a href='index.html'> here </a> to Login" ;
-    showMsgNSecs('alert-danger',msg, 10);
-  }
 
 
   // Assigns the current active user to the group
@@ -339,20 +329,10 @@ function callRest()
   document.getElementById('btnRemoveFromAllUsers').addEventListener('click', removeFromAll);
   document.getElementById('btnGetUsersWithEmail').addEventListener('click', getUsersWithEmail);
   document.getElementById('environmentChoice').addEventListener('click', changeEnvironment);
-
+  getMyOwnedGroups();
   //callGraphApi('result','ownedObjects','');
   //	callGraphApi('result','ownedObjects?$select=id,displayName','');
   //	callGraphApi('result','users?$filter=startswith(mail,\'john.doe\')&$select=id,mail','');
 }
 
 // Utility function to display a message for some number of seconds
-function showMsgNSecs (alertclass, message, numsecs)
-{
-  document.getElementById('message').className = "alert "+alertclass;
-  document.getElementById('message').innerHTML = message;
-  document.getElementById('message').style = 'visibility:visible';
-
-  setTimeout(function(){
-    document.getElementById('message').style = 'visibility:hidden';
-  }, numsecs*1000);
-}
