@@ -12,10 +12,10 @@ var CDTGroups = [
   {"Name":"MaerskPortal-WBOLApprover (Test)","Env":"CDT", "id" :"6e62dcf0-d3ca-48a5-b228-3a970b066e3c", "type":"included","displayclass":" disabled ml-4 " },
   {"Name":"MaerskPortal-WBOLPrinter (Test)","Env":"CDT", "id" :"1f622b07-1f50-4fb6-9e4a-b76f5564fddc", "type":"additional","displayclass":" active " },
   {"Name":"MaerskPortal-MilitaryBooking (Test)","Env":"CDT", "id" :"50a8c1ed-ebdc-432d-aa3f-3ac1c3a4c24e", "type":"additional","displayclass":" active " },
-  {"Name":"MaerskPortal-Invoices (Test)","Env":"CDT", "id" :"081e09ad-f10f-4c8c-a857-0927f74f948c", "type":"additional","displayclass":" active  " },
+  {"Name":"MaerskPortal-Invoices (Test)","Env":"CDT", "id" :"081e09ad-f10f-4c8c-a857-0927f74f948c", "type":"included","displayclass":" disabled ml-4  " },
   {"Name":"MaerskPortal-SAPBankPayments (Test)","Env":"CDT", "id" :"2bf297ad-af10-4287-843b-2a42f1fc8058", "type":"additional","displayclass":" active  " },
-  {"Name":"MaerskPortal-InternalPayments (Test)","Env":"CDT", "id" :"19661dfa-7af5-4d8b-819b-5f47a569e79b", "type":"additional","displayclass":" active  " },
-  {"Name":"MaerskPortal-ImportCSA (Test)","Env":"CDT", "id" :"bf79f984-e51a-494f-bf2c-8046b62ed3e0", "type":"additional","displayclass":" active  " }
+  {"Name":"MaerskPortal-CSOPAdmin (Test)","Env":"CDT", "id" :"19661dfa-7af5-4d8b-819b-5f47a569e79b", "type":"additional","displayclass":" active  " },
+  {"Name":"MaerskPortal-ImportCSA (Test)","Env":"CDT", "id" :"bf79f984-e51a-494f-bf2c-8046b62ed3e0", "type":"included","displayclass":" disabled ml-4  " }
 ];
 
 var PRODGroups = [
@@ -27,11 +27,11 @@ var PRODGroups = [
   {"Name":"MaerskPortal-Documentation (Prod)","Env":"PRODUCTION", "id" :"ef757b3f-7960-4de9-91bf-c9e47fa3a750", "type":"included","displayclass":" disabled ml-4 " },
   {"Name":"MaerskPortal-WBOLApprover (Prod)","Env":"PRODUCTION", "id" :"8dfdeca6-4886-49c2-8954-1b5b559258d9", "type":"included","displayclass":" disabled ml-4 " },
   {"Name":"MaerskPortal-WBOLPrinter (Prod)","Env":"PRODUCTION", "id" :"d36f7db7-21c5-45dd-9556-0c5ae3ce08c6", "type":"additional","displayclass":" active  " },
-  {"Name":"MaerskPortal-InternalPayments (Prod)","Env":"PRODUCTION", "id" :"96e4499a-649f-4f32-b6ed-1cbd0c630654", "type":"additional","displayclass":" active  " },
+  {"Name":"MaerskPortal-CSOPAdmin (Prod)","Env":"PRODUCTION", "id" :"96e4499a-649f-4f32-b6ed-1cbd0c630654", "type":"additional","displayclass":" active  " },
   {"Name":"MaerskPortal-MilitaryBooking (Prod)","Env":"PRODUCTION", "id" :"abfe6748-5753-44a7-9077-25f8b1dd5556", "type":"additional","displayclass":" active  " },
-  {"Name":"MaerskPortal-Invoices (Prod)","Env":"PRODUCTION", "id" :"75504d36-c7fd-43e1-b685-13343b018023", "type":"additional","displayclass":" active  " },
+  {"Name":"MaerskPortal-Invoices (Prod)","Env":"PRODUCTION", "id" :"75504d36-c7fd-43e1-b685-13343b018023", "type":"included","displayclass":" disabled ml-4  " },
   {"Name":"MaerskPortal-SAPBankPayments (Prod)","Env":"PRODUCTION", "id" :"79cfe0c0-698f-4213-8a23-66c17a4c2603", "type":"additional","displayclass":" active  " },
-  {"Name":"MaerskPortal-ImportCSA (Prod)","Env":"PRODUCTION", "id" :"2acc3b2e-4e60-46cc-ae08-1ad0674a3de4", "type":"additional","displayclass":" active  " }
+  {"Name":"MaerskPortal-ImportCSA (Prod)","Env":"PRODUCTION", "id" :"2acc3b2e-4e60-46cc-ae08-1ad0674a3de4", "type":"included","displayclass":" disabled ml-4  " }
 ];
 
 var STAGEGroups = [
@@ -44,10 +44,10 @@ var STAGEGroups = [
   {"Name":"MaerskPortal-WBOLApprover (Stage)","Env":"STAGE", "id" :"8cd99a55-0e0c-4ae0-85f3-dbc829c72708", "type":"included","displayclass":" disabled ml-4 " },
   {"Name":"MaerskPortal-WBOLPrinter (Stage)","Env":"STAGE", "id" :"2f0c6116-f429-4ead-a151-53ad7f42f96a", "type":"additional","displayclass":" active  " },
   {"Name":"MaerskPortal-MilitaryBooking (Stage)","Env":"STAGE", "id" :"f9b1df25-0fd2-4322-8e4c-f1b627b75476", "type":"additional","displayclass":" active  " },
-  {"Name":"MaerskPortal-Invoices (Stage)","Env":"STAGE", "id" :"69b0e245-40e9-43c0-a04f-9f30535b83ed", "type":"additional","displayclass":" active  " },
-  {"Name":"MaerskPortal-InternalPayments (Stage)","Env":"STAGE", "id" :"1e841727-4d04-46f0-9ced-6d24c161617d", "type":"additional","displayclass":" active  " },
+  {"Name":"MaerskPortal-Invoices (Stage)","Env":"STAGE", "id" :"69b0e245-40e9-43c0-a04f-9f30535b83ed", "type":"included","displayclass":" disabled ml-4  " },
+  {"Name":"MaerskPortal-CSOPAdmin (Stage)","Env":"STAGE", "id" :"1e841727-4d04-46f0-9ced-6d24c161617d", "type":"additional","displayclass":" active  " },
   {"Name":"MaerskPortal-SAPBankPayments (Stage)","Env":"STAGE", "id" :"b2219c53-c10c-4572-aeb2-f2d4e817abb8", "type":"additional","displayclass":" active  " },
-  {"Name":"MaerskPortal-ImportCSA (Stage)","Env":"STAGE", "id" :"60d8066a-ea75-40dd-b30c-185d8ad575bb", "type":"additional","displayclass":" active  " }
+  {"Name":"MaerskPortal-ImportCSA (Stage)","Env":"STAGE", "id" :"60d8066a-ea75-40dd-b30c-185d8ad575bb", "type":"included","displayclass":" disabled ml-4  " }
 ];
 var ownedgroups=[];
 var currentEnvGroups=[];
