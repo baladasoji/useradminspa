@@ -13,6 +13,8 @@ function store(){
           msg.innerHTML = "No Token available redirecting to Azure AD for authentication";
           setTimeout(function(){
               window.location.href = "https://login.microsoftonline.com/maersk.onmicrosoft.com/oauth2/v2.0/authorize?response_mode=fragment&nonce=987234&client_id=08d64f11-9c8a-4a08-a737-022b04c0b9a9&response_type=token&redirect_uri=https%3A%2F%2Fportaluseradmin.azurewebsites.net%2Findex.html&state=0237840987234&scope=openid%20profile" ;
+// Use the below for local testing For local testing
+              //window.location.href = "https://login.microsoftonline.com/maersk.onmicrosoft.com/oauth2/v2.0/authorize?response_mode=fragment&nonce=987234&client_id=08d64f11-9c8a-4a08-a737-022b04c0b9a9&response_type=token&redirect_uri=http%3A%2F%2Flocalhost:5000%2Findex.html&state=0237840987234&scope=openid%20profile" ;
           }, 1000);
       }
       else{
