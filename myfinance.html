@@ -6,7 +6,7 @@
   <meta name="author" content="">
   <link rel="icon" href="../../../../favicon.ico">
 
-  <title>Basic user administration </title>
+  <title>MyFinance Import </title>
 
   <!-- Bootstrap core CSS -->
 
@@ -16,7 +16,7 @@
   <!-- Custom styles for this template -->
   <link href="jumbotron.css" rel="stylesheet">
   <script type="text/javascript" src="common.js"></script>
-  <script type="text/javascript" src="basic.js"></script>
+  <script type="text/javascript" src="myfinance.js"></script>
 </head>
 
 <body onload=callRest()>
@@ -25,16 +25,16 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="navbar-nav">
       <a class="nav-item nav-link h3" href="index.html">Home</a>
-      <a class="nav-item nav-link h3 active" href="basic.html">Basic</a>
+      <a class="nav-item nav-link h3" href="basic.html">Basic</a>
       <a class="nav-item nav-link h3" href="advanced.html">Advanced</a>
-      <a class="nav-item nav-link h3" href="myfinance.html">SAP Import</a>
+      <a class="nav-item nav-link h3 active" href="myfinance.html">SAP Import</a>
     </div>
   </nav>
 
   <div class="jumbotron">
 
     <div class="container">
-      <h2 class="display-4">Portal access management</h2>
+      <h2 class="display-4">SAP Import Generator</h2>
     </div>
   </div>
 
@@ -44,18 +44,6 @@
     <h2>
 
       <form>
-        <div class="row mb-4">
-          <div class="col-12">
-            <p>
-              <select id="environmentChoice" class="btn btn-block btn-info btn-lg">
-                <option value="NONE">Please choose an environment.. </option>
-                <option value="CDT">Test</option>
-                <option value="STAGE">Pre-Production</option>
-                <option value="PRODUCTION">Production</option>
-              </select>
-            </p>
-          </div>
-        </div>
         <div class="row mb-2">
           <div class="col-12">
             <div class="form-group">
@@ -68,22 +56,20 @@
             <a href="#" class="btn btn-info btn-block btn-lg" role="button" id="btnGetUsersWithEmail" > Search Users </a>
           </div>
         </div>
+        <div class="row mb-2">
+          <div class="col-12">
+            <a href="#" class="btn btn-info btn-block btn-lg" role="button" id="btnGenerateSAPText" > Generate SAP Import </a>
+          </div>
+        </div>
 
       </form>
       <div id="message" class="alert alert-primary" style="visibility:hidden"> </div>
 
 
-      <div class="row">
-        <div class="col-6">
-          <a href="#message" class="btn btn-success btn-block btn-lg" role="button" id="btnAssignToAllUsers" > Assign to All </a>
-        </div>
-        <div class="col-6">
-          <a href="#mesage" class="btn btn-danger btn-block btn-lg" role="button" id="btnRemoveFromAllUsers" > Remove from All </a>
-        </div>
-      </div>
-      <div class="mt-4 rounded" id="userresult">
-      </div>
+      <div class="mt-4 rounded" id="userresult"> </div>
     </h2>
+      <div class="mt-4 rounded" id="sapimporttext"> <p id="saptext"> </p> </div>
+      </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
