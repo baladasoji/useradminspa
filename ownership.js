@@ -7,9 +7,8 @@ var access_token='';
 
 
 // Removes the curent active user from the group
-function removeOwnerFromGroup ( groupid)
+function removeOwnerFromGroup ( groupid, refresh = true, timeout=1)
 {
-  var timeout=1;
   userid = user.id;
   url = `${groupid}/owners/${userid}/$ref`;
   var apiXMLReq = new XMLHttpRequest();
@@ -18,11 +17,14 @@ function removeOwnerFromGroup ( groupid)
     {
       if (this.status == 204)
       {
-          showMsgNSecs('alert-info','Removing group ownership from user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
-          setTimeout(function()
-          {
-            checkOwnerGroups();
-          }, timeout*1000);
+	  if (refresh)
+	  {
+	    showMsgNSecs('alert-info','Removing group ownership from user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
+	    setTimeout(function()
+	    {
+		checkOwnerGroups();
+	    }, timeout*1000);
+	  }
       }
       else if (this.status == 401)
       {
@@ -39,7 +41,7 @@ function removeOwnerFromGroup ( groupid)
 
   // Assigns the current active user to the group
 
-  function assignOwnerToGroup ( groupid)
+  function assignOwnerToGroup ( groupid, refresh = true, timeout=1)
   {
     var timeout=1;
     url = `${groupid}/owners/$ref`;
@@ -49,11 +51,14 @@ function removeOwnerFromGroup ( groupid)
     apiXMLReq.onreadystatechange = function() {
       if (this.status == 204)
       {
-        showMsgNSecs('alert-info','Adding group ownership to user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
-        setTimeout(function()
-        {
-          checkOwnerGroups();
-        }, timeout*1000);
+	if (refresh)
+	{
+	    showMsgNSecs('alert-info','Adding group ownership to user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', timeout);
+	    setTimeout(function()
+	    {
+		checkOwnerGroups();
+	    }, timeout*1000);
+	}
       }
       else if (this.status == 401)
       {
@@ -225,6 +230,8 @@ function removeOwnerFromGroup ( groupid)
     access_token=sessionStorage.access_token;
     document.getElementById('btnGetUserWithEmail').addEventListener('click', getUserWithEmail);
     document.getElementById('environmentChoice').addEventListener('click', changeEnvironment);
+    document.getElementById('btnAssignToAllGroups').addEventListener('click', assignToAll);
+    document.getElementById('btnRemoveFromAllGroups').addEventListener('click', removeFromAll);
     // Get users owned groups from AD first we use this in comparision later
     getMyOwnedGroups();
 
@@ -232,3 +239,62 @@ function removeOwnerFromGroup ( groupid)
     //	callGraphApi('result','ownedObjects?$select=id,displayName','');
     //	callGraphApi('result','users?$filter=startswith(mail,\'john.doe\')&$select=id,mail','');
   }
+
+
+function preChecksForAll()
+{
+  //console.log("inside prechecksforall");
+  if (currentEnv == null || currentEnv == "" || currentEnv == "NONE" )
+  {
+    showMsgNSecs ('alert-danger','Please choose environment first',3);
+    return false;
+  }
+    // Do we have an active user that we can use - Check this by ensuring that user result is displayed
+  else if (document.getElementById('userresult').style.display == 'none')
+  {
+
+    showMsgNSecs ('alert-danger','Please search for users first',3);
+    return false;
+  }
+  else
+  return true;
+}
+
+
+function assignToAll()
+{
+  //console.log("inside assignt ot all");
+  if (preChecksForAll())
+  {
+    showMsgNSecs('alert-info','Adding all groups ownership to user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', 6 );
+    allgroups = document.getElementById("allgroups").childNodes;
+    for (g=0 ;g <allgroups.length; g++)
+    {
+      assignOwnerToGroup(allgroups[g].id, false, 4);
+    }
+    setTimeout(function()
+    {
+	checkOwnerGroups();
+    }, 4000);
+
+  }
+}
+
+function removeFromAll()
+{
+  //console.log("inside remove from  all");
+  if (preChecksForAll())
+  {
+    allgroups = document.getElementById("allgroups").childNodes;
+    showMsgNSecs('alert-info','Removing all groups ownership from user <i class="fa fa-spinner fa-spin" style="font-size:24px"></i>', 6 );
+    for (g=0 ;g <allgroups.length; g++)
+    {
+      removeOwnerFromGroup(allgroups[g].id, false, 4);
+    }
+    setTimeout(function()
+    {
+	checkOwnerGroups();
+    }, 4000);
+
+  }
+}

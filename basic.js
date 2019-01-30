@@ -22,9 +22,9 @@ function removeUserFromGroup (userid, groupid)
   {
     //alert ('got a package group');
     sgrp = getSubGroups(currentEnvGroups, currentEnv, "included") ;
-    for (grp in sgrp)
+    for (i=0; i<sgrp.length; i++)
     {
-      removeUserFromGroup (userid, sgrp[grp]);
+      removeUserFromGroup (userid, sgrp[i]);
     }
   }
   url = `${groupid}/members/${userid}/$ref`;
@@ -80,9 +80,9 @@ function removeUserFromGroup (userid, groupid)
     {
       //	alert ('got a package group');
       sgrp = getSubGroups(currentEnvGroups, currentEnv, "included") ;
-      for (grp in sgrp)
+	for (i=0; i<sgrp.length; i++)
       {
-        assignUserToGroup (userid, sgrp[grp]);
+        assignUserToGroup (userid, sgrp[i]);
       }
     }
 
