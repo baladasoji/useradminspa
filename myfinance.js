@@ -69,8 +69,18 @@ function generateImport()
     {
 	email = allusers[u].value;
 	names = allusers[u].innerText.split(",");
-	lastname = names[0];
-	firstname = names[1];
+	lastname='';
+	firstname='';
+	if (names.length == 2)
+	{
+	    lastname = names[0];
+	    firstname = names[1];
+	}
+	else if (names.length == 1)
+	{
+	    lastname = names[0];
+	    firstname = names[0];
+	}
 	curusertext='[User]\nuid=EMAIL\nlast_name=LASTNAME\nfirst_name=FIRSTNAME\ncom.sap.security.core.user.references:objkey_0=1000DKINTMSL\ncom.sap.security.core.user.references:objtype_0=BUS3007\ncom.sap.security.core.user.refuser:fscm_refuser=BD_REF1000\n';
 	curusertext = curusertext.replace('EMAIL',email.trim());
 	curusertext = curusertext.replace('FIRSTNAME',firstname.trim());
