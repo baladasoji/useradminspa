@@ -18,7 +18,7 @@ var CDTGroups = [
   {"Name":"MaerskPortal-MilitaryBooking (Test)","Env":"CDT", "id" :"50a8c1ed-ebdc-432d-aa3f-3ac1c3a4c24e", "type":"additional","displayclass":" active " },
   {"Name":"MaerskPortal-NotificationsAdmin (Test)","Env":"CDT", "id" :"6d4c52b1-e865-4018-ac64-4f491dfa4cb9", "type":"additional","displayclass":" active  " },
   {"Name":"MaerskPortal-OfficeAccess (Test)","Env":"CDT", "id" :"27fde6bb-8103-4c48-a36f-12bf5773884b", "type":"additional","displayclass":" active  " },
-  {"Name":"MaerskPortal-SAPBankPayments (Test)","Env":"CDT", "id" :"2bf297ad-af10-4287-843b-2a42f1fc8058", "type":"additional","displayclass":" active  " },
+  {"Name":"MaerskPortal-BackofficeAdmin (Test)","Env":"CDT", "id" :"2bf297ad-af10-4287-843b-2a42f1fc8058", "type":"additional","displayclass":" active  " },
   {"Name":"MaerskPortal-WBOLPrinter (Test)","Env":"CDT", "id" :"1f622b07-1f50-4fb6-9e4a-b76f5564fddc", "type":"additional","displayclass":" active " }
 ];
 
@@ -38,7 +38,7 @@ var STAGEGroups = [
   {"Name":"MaerskPortal-MilitaryBooking (Stage)","Env":"STAGE", "id" :"f9b1df25-0fd2-4322-8e4c-f1b627b75476", "type":"additional","displayclass":" active  " },
   {"Name":"MaerskPortal-NotificationsAdmin (Stage)","Env":"STAGE", "id" :"c088ff8a-a945-443f-9a65-055e23e70389", "type":"additional","displayclass":" active  " },
   {"Name":"MaerskPortal-OfficeAccess (Stage)","Env":"STAGE", "id" :"ee1802ee-afe7-45e2-9d5e-67be200488fa", "type":"additional","displayclass":" active  " },
-  {"Name":"MaerskPortal-SAPBankPayments (Stage)","Env":"STAGE", "id" :"b2219c53-c10c-4572-aeb2-f2d4e817abb8", "type":"additional","displayclass":" active  " },
+  {"Name":"MaerskPortal-BackofficeAdmin (Stage)","Env":"STAGE", "id" :"b2219c53-c10c-4572-aeb2-f2d4e817abb8", "type":"additional","displayclass":" active  " },
   {"Name":"MaerskPortal-WBOLPrinter (Stage)","Env":"STAGE", "id" :"2f0c6116-f429-4ead-a151-53ad7f42f96a", "type":"additional","displayclass":" active  " }
 ];
 
@@ -58,7 +58,7 @@ var PRODGroups = [
   {"Name":"MaerskPortal-MilitaryBooking (Prod)","Env":"PRODUCTION", "id" :"abfe6748-5753-44a7-9077-25f8b1dd5556", "type":"additional","displayclass":" active  " },
   {"Name":"MaerskPortal-NotificationsAdmin (Prod)","Env":"PRODUCTION", "id" :"a2561fd8-bb1a-4e9c-b010-cb4844c42f5c", "type":"additional","displayclass":" active  " },
   {"Name":"MaerskPortal-OfficeAccess (Prod)","Env":"PRODUCTION", "id" :"4bd0fac7-fe95-413d-8b0c-0341c345dc78", "type":"additional","displayclass":" active  " },
-  {"Name":"MaerskPortal-SAPBankPayments (Prod)","Env":"PRODUCTION", "id" :"79cfe0c0-698f-4213-8a23-66c17a4c2603", "type":"additional","displayclass":" active  " },
+  {"Name":"MaerskPortal-BackofficeAdmin (Prod)","Env":"PRODUCTION", "id" :"79cfe0c0-698f-4213-8a23-66c17a4c2603", "type":"additional","displayclass":" active  " },
   {"Name":"MaerskPortal-WBOLPrinter (Prod)","Env":"PRODUCTION", "id" :"d36f7db7-21c5-45dd-9556-0c5ae3ce08c6", "type":"additional","displayclass":" active  " }
 ];
 
