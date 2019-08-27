@@ -249,7 +249,7 @@ function removeUserFromGroup ( groupid)
     else
     {
       mailaddress=document.getElementById('email').value;
-      callUserApi('userresult',"users?$filter=startswith(mail,\'" + mailaddress+ "\')&$select=id,mail,displayName",access_token);
+      callUserApi('userresult',"users?$filter=startswith(userprincipalname,\'" + mailaddress+ "\')&$select=id,userprincipalname,displayName",access_token);
     }
   }
 

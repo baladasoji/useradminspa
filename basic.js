@@ -181,7 +181,7 @@ function getUsersWithEmail()
       if (curmail.trim() != "")
       {
         //console.log(emails[email]);
-        callUserApi('userresult',"users?$filter=startswith(mail,\'" + curmail+ "\')&$select=id,mail,displayName",access_token);
+        callUserApi('userresult',"users?$filter=startswith(userprincipalname,\'" + curmail+ "\')&$select=id,userprincipalname,displayName",access_token);
       }
     }
   }
